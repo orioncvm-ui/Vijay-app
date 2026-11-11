@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b2e59">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Vijay Constr.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Vijay Constructions – Worker Attendance & Payment Management</title>
+<style>
+:root{--blue:#0b2e59;--blue2:#14457f;--green:#1b8a4b;--green2:#e6f4ec;--red:#c0392b;--amber:#d98a00;--bg:#f4f6f9;--line:#d9e0e8;--txt:#1d2733;--navh:62px;--sab:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--txt);background:#fff;font-size:16px;overflow-x:hidden}
+#app{display:block}
+aside{display:none}
+.topbar{position:sticky;top:0;z-index:30;background:var(--blue);color:#fff;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));display:flex;flex-direction:column}
+.topbar b{font-size:17px;letter-spacing:.5px}.topbar small{font-size:11px;opacity:.8}
+main{min-width:0;background:#fff;padding:12px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-bottom:calc(var(--navh) + 28px + var(--sab))}
+#bnav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 10px rgba(11,46,89,.12);padding-bottom:var(--sab);height:calc(var(--navh) + var(--sab))}
+#bnav button{flex:1;background:none;border:0;border-top:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#5b6b7d;font-size:11px;padding:4px 0;cursor:pointer;min-width:0}
+#bnav button i{font-style:normal;font-size:22px;line-height:1.1}
+#bnav button.on{color:var(--blue2);border-top-color:var(--green);font-weight:700;background:#f1f6fc}
+h2{margin:0 0 4px;color:var(--blue);font-size:21px}
+.sub{color:#5b6b7d;margin-bottom:12px;font-size:13px}
+h3{color:var(--blue);margin:18px 0 8px;font-size:16px;border-bottom:2px solid var(--green);padding-bottom:4px;display:inline-block}
+.warn{background:#fff6e0;border:1px solid #f0c36b;color:#7a5200;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:13px}
+.demo-banner{background:#e8f0fb;border:1px solid #b6cdee;color:var(--blue);padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.card{border:1px solid var(--line);border-left:5px solid var(--blue2);border-radius:10px;padding:9px 10px;background:#fff;min-width:0}
+.card.g{border-left-color:var(--green)}.card.r{border-left-color:var(--red)}.card.a{border-left-color:var(--amber)}
+.card small{color:#5b6b7d;display:block;font-size:12px;line-height:1.2}
+.card b{font-size:clamp(15px,4.6vw,20px);color:var(--blue);word-break:break-word;display:block;margin-top:2px}
+.qa{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.qa .btn{margin:0;min-height:52px;font-size:15px}.qa .btn:last-child{grid-column:1/-1}
+.btn{background:var(--blue2);color:#fff;border:0;padding:11px 16px;min-height:46px;border-radius:8px;font-size:15px;cursor:pointer;margin:2px 3px 2px 0;font-family:inherit}
+.btn:active{filter:brightness(.85)}
+.btn.g{background:var(--green)}.btn.r{background:var(--red)}.btn.o{background:#fff;color:var(--blue2);border:1px solid var(--blue2)}
+.btn.s{padding:9px 12px;font-size:14px;min-height:44px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:12px}
+.bar label{display:flex;flex-direction:column;font-size:12px;color:#5b6b7d;gap:3px;flex:1 1 140px;min-width:0}
+.bar .btn{flex:1 1 auto;margin:0}
+.bar input,.bar select{width:100%}
+input,select,textarea{font:inherit;font-size:16px;padding:9px 10px;min-height:46px;border:1px solid #b9c4d1;border-radius:8px;background:#fff;max-width:100%;min-width:0}
+input[type=checkbox]{min-height:0;width:22px;height:22px}
+input:focus,select:focus,textarea:focus{outline:2px solid #9ec5f5}
+input:disabled,select:disabled,textarea:disabled{background:#eef1f5}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;margin:0 0 10px;min-height:44px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin-bottom:10px}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px}
+table.t th{background:var(--blue);color:#fff;text-align:left;padding:8px 9px;white-space:nowrap}
+table.t td{padding:7px 9px;border-top:1px solid var(--line);vertical-align:middle}
+table.t tr:nth-child(even) td{background:#f8fafc}
+table.t td.n,table.t th.n{text-align:right;white-space:nowrap}
+table.t tr.tot td{background:var(--green2);font-weight:700}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:#e3e8ef;color:#33475b}
+.badge.demo{background:#ffe08a;color:#6b4a00}.badge.ok{background:#d3f0de;color:#12643a}.badge.bad{background:#fbd9d5;color:#8d2217}.badge.warn{background:#fdebc4;color:#7a5200}
+.fg{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.fg input,.fg select,.fg textarea{width:100%}
+.fg label{min-width:0;display:flex;flex-direction:column;font-size:13px;color:#5b6b7d;gap:4px}
+.fg .full{grid-column:1/-1}
+#modal{display:none;position:fixed;inset:0;background:rgba(10,25,45,.55);z-index:60;align-items:flex-start;justify-content:center;overflow:auto;padding:0}
+.mbox{background:#fff;width:100%;min-height:100%;display:flex;flex-direction:column}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top,0px));background:var(--blue);color:#fff;position:sticky;top:0;z-index:3;font-size:16px}
+.mh .x{background:none;border:0;color:#fff;font-size:22px;cursor:pointer;min-width:44px;min-height:44px}
+.mb{padding:14px;padding-bottom:calc(14px + var(--sab));flex:1}
+#modal .mb>p:last-child{position:sticky;bottom:0;background:#fff;padding:10px 0 calc(10px + var(--sab));margin:14px 0 0;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;z-index:2}
+#modal .mb>p:last-child .btn{flex:1 1 auto;margin:0}
+#modal input[type=number]{font-size:20px;font-weight:600}
+#toast{position:fixed;bottom:calc(var(--navh) + 16px + var(--sab));left:50%;transform:translateX(-50%);background:#12643a;color:#fff;padding:12px 18px;border-radius:10px;display:none;z-index:99;max-width:92vw;font-size:15px;box-shadow:0 4px 16px rgba(0,0,0,.3);white-space:pre-line}
+#toast.err{background:#a52a1f}
+#busy{display:none;position:fixed;inset:0;background:rgba(255,255,255,.75);z-index:95;align-items:center;justify-content:center}
+.sp{width:46px;height:46px;border:5px solid #cfd8e3;border-top-color:var(--blue2);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:14px}.kv span:nth-child(odd){color:#5b6b7d}.kv span{word-break:break-word}
+.neg{color:var(--red)}.pos{color:var(--green)}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.gridc{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:10px}
+.pc{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;border-left:6px solid var(--green)}
+.pc.inact{border-left-color:#9aa6b2;background:#f6f7f9}
+.pch{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:8px}
+.pch b{font-size:17px;color:var(--blue)}
+.pg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 10px;font-size:14px;margin-bottom:8px}
+.pg small{display:block;color:#5b6b7d;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+.pg>div{min-width:0;word-break:break-word}
+.pg a{color:var(--blue2);text-decoration:none;font-weight:600}
+.pa{display:flex;flex-wrap:wrap;gap:6px}.pa .btn{flex:1 1 auto;margin:0}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:96px;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:15px;color:var(--blue);font-weight:600;cursor:pointer;font-family:inherit;border-bottom:4px solid var(--green)}
+.tile i{font-style:normal;font-size:30px}
+.tile:last-child:nth-child(odd){grid-column:1/-1}
+.tbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:flex-end}
+.tbar label{min-width:0;flex:1 1 140px;display:flex;flex-direction:column;font-size:12px;color:#5b6b7d;gap:3px}
+.tbar input,.tbar select{width:100%}
+.big2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;width:100%}
+.big2 .btn{margin:0;min-height:50px}
+.wc{border:1px solid var(--line);border-left:7px solid #cfd8e3;border-radius:12px;padding:10px;margin-bottom:10px;background:#fff}
+.wc[data-st=P]{border-left-color:var(--green);background:#f3fbf6}
+.wc[data-st=HD]{border-left-color:var(--amber);background:#fffaf0}
+.wc[data-st=A]{border-left-color:var(--red);background:#fff5f4}
+.wc[data-st=PL],.wc[data-st=UL],.wc[data-st=H]{border-left-color:#2f6fd0;background:#f2f7ff}
+.wc[data-st=WO]{border-left-color:#7b8794;background:#f4f5f7}
+.wch>div:first-child{min-width:0}.wch{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}
+.wch b{font-size:16px;color:var(--blue)}.wamt{font-weight:700;color:var(--blue);text-align:right;white-space:nowrap;font-size:14px}
+.sbtn{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.sbtn button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;padding:4px 0;border:1.5px solid #b9c4d1;background:#fff;border-radius:10px;font-size:11px;font-weight:600;color:#33475b;font-family:inherit;cursor:pointer;min-width:0}
+.sbtn button i{font-style:normal;font-size:18px;line-height:1}
+.sbtn button.on{color:#fff;border-color:transparent}
+.sbtn button.on[data-k=P]{background:var(--green)}.sbtn button.on[data-k=HD]{background:var(--amber)}.sbtn button.on[data-k=A]{background:var(--red)}.sbtn button.on[data-k=L]{background:#2f6fd0}.sbtn button.on[data-k=WO]{background:#6b7785}
+.lv{display:none;gap:6px;margin-top:6px;flex-wrap:wrap}
+.lv button{flex:1 1 auto;min-height:44px;border:1.5px solid #2f6fd0;background:#fff;color:#2f6fd0;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit}
+.lv button.on{background:#2f6fd0;color:#fff}
+.wf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px}.wf input{width:100%}
+.wf label{min-width:0;display:flex;flex-direction:column;font-size:11px;color:#5b6b7d;gap:2px}
+.wf .full{grid-column:1/-1}
+.sticky{position:sticky;bottom:calc(var(--navh) + var(--sab));z-index:20;background:#fff;border-top:2px solid var(--green);padding:8px 10px;margin:8px -12px 0;display:flex;gap:8px;align-items:center;box-shadow:0 -3px 10px rgba(0,0,0,.08)}
+.sticky .cnt{flex:1;font-size:12px;line-height:1.35}.sticky .btn{margin:0;min-height:50px;font-size:16px;flex:0 0 auto}
+details.logbox{margin-top:16px;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+details summary{cursor:pointer;min-height:46px;display:flex;align-items:center;font-weight:600;color:var(--blue)}
+details.logbox[open] summary{border-bottom:1px solid var(--line);margin-bottom:10px}
+.sc{border:1px solid var(--line);border-left:6px solid var(--amber);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.sc.ap{border-left-color:var(--green)}
+.sch{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}.sch b{font-size:16px;color:var(--blue)}
+.sg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px}.sg>div{min-width:0}
+.sg small{display:block;color:#5b6b7d;font-size:11px}.sg b{font-size:14px;word-break:break-word}.sg .nt{color:var(--blue)}
+.sc details{border-top:1px dashed var(--line);margin-top:4px}.sc details table{margin-top:6px}
+.sa{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.sa .btn{flex:1 1 auto;margin:0}
+#printRoot{display:none}
+.slip{font-family:Arial,sans-serif;color:#000;font-size:12.5px}
+.slip h1{margin:0;text-align:center;font-size:22px;color:#0b2e59}.slip h4{margin:2px 0 10px;text-align:center;font-size:14px}
+.slip table{width:100%;border-collapse:collapse;margin-bottom:8px}.slip td,.slip th{border:1px solid #444;padding:4px 7px;text-align:left}
+.slip td.n{text-align:right}.slip th{background:#e5ecf5}.slip .sig{display:flex;justify-content:space-between;margin-top:46px}
+.slip .sig div{border-top:1px solid #000;width:40%;text-align:center;padding-top:3px}
+.pt{border-collapse:collapse;width:100%;font-size:11px}.pt th,.pt td{border:1px solid #444;padding:3px 5px}.pt th{background:#e5ecf5}.pt td.n{text-align:right}
+@media(max-width:339px){.cards{grid-template-columns:1fr}.sg{grid-template-columns:1fr 1fr}.sbtn button{font-size:10px}}
+@media(min-width:400px){.sg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* tables become cards on phones */
+@media(max-width:700px){
+ .tw{border:0;overflow:visible;margin-bottom:6px}
+ table.t:not(.keep),table.t:not(.keep) tbody{display:block;width:100%}
+ table.t:not(.keep) thead{display:none}
+ table.t:not(.keep) tr{display:block;border:1px solid var(--line);border-left:5px solid var(--blue2);border-radius:10px;margin-bottom:10px;padding:4px 10px;background:#fff}
+ table.t:not(.keep) tr.tot{border-left-color:var(--green);background:var(--green2)}
+ table.t:not(.keep) td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0!important;border-bottom:1px dashed #e3e9f0!important;padding:7px 0;text-align:right;background:none!important;white-space:normal!important;word-break:break-word;min-height:34px}
+ table.t:not(.keep) td:last-child{border-bottom:0!important}
+ table.t:not(.keep) td::before{content:attr(data-label);font-weight:600;color:#5b6b7d;text-align:left;flex:0 0 40%;font-size:12px}
+ table.t:not(.keep) td[data-label=""]::before{display:none}
+ table.t:not(.keep) td[data-label=""]{justify-content:flex-start;flex-wrap:wrap;text-align:left}
+ table.t:not(.keep) td:empty{display:none}
+ table.t.keep{font-size:13px}
+}
+@media(min-width:700px){
+ .gridc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr 1fr}
+ .cards{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}.tiles{grid-template-columns:repeat(3,1fr)}
+ .qa{grid-template-columns:repeat(5,1fr)}.qa .btn:last-child{grid-column:auto}
+ #modal{padding:20px 10px}.mbox{width:min(760px,100%);min-height:0;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+ .mbox.wide{width:min(1000px,100%)}.mh{border-radius:10px 10px 0 0;padding-top:12px}
+ .kv{grid-template-columns:150px 1fr}main{padding:18px 22px;padding-bottom:calc(var(--navh) + 28px + var(--sab))}
+ .sticky{margin:8px 0 0;border-radius:0 0 10px 10px}
+}
+@media(min-width:900px){
+ :root{--navh:0px}
+ .topbar,#bnav{display:none}
+ #app{display:flex;min-height:100vh}
+ aside{display:flex;flex-direction:column;width:232px;background:var(--blue);color:#fff;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+ aside .brand{padding:16px 14px;border-bottom:1px solid rgba(255,255,255,.18)}
+ aside .brand b{display:block;font-size:17px;letter-spacing:.5px}
+ aside .brand span{font-size:11px;opacity:.8}
+ aside nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#dbe6f5;padding:12px 16px;font-size:15px;cursor:pointer;border-left:4px solid transparent;font-family:inherit}
+ aside nav button:hover{background:rgba(255,255,255,.08)}
+ aside nav button.on{background:rgba(255,255,255,.14);color:#fff;border-left-color:#3ddc84;font-weight:600}
+ main{flex:1;padding-bottom:30px}
+ #toast{bottom:20px}
+ .gridc{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+ .btn{font-size:14px;min-height:40px}.btn.s{min-height:36px;padding:6px 10px;font-size:13px}
+ input,select,textarea{font-size:14px;min-height:38px}
+ #modal input[type=number]{font-size:16px}
+ .sbtn button{min-height:46px}
+}
+@media print{
+ body>*:not(#printRoot){display:none!important}
+ #printRoot{display:block!important}
+ @page{size:A4;margin:12mm}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><b>VIJAY CONSTRUCTIONS</b><small>Worker Attendance &amp; Weekly Payment Management</small></div>
+<div id="app">
+ <aside id="side">
+  <div class="brand"><b>VIJAY CONSTRUCTIONS</b><span>Worker Attendance &amp; Weekly Payment Management</span></div>
+  <nav id="nav"></nav>
+ </aside>
+ <main id="main"></main>
+</div>
+<nav id="bnav"></nav>
+<div id="modal" onclick="if(event.target===this)closeModal()"></div>
+<div id="toast" onclick="this.style.display='none'"></div>
+<div id="busy"><div class="sp"></div></div>
+<div id="printRoot"></div>
+
+<script>
+/* =====================  DATA LAYER  ===================== */
+const KEY='vijay_constructions_db_v1';
+const STATUSES={P:'Present',HD:'Half Day',A:'Absent',PL:'Paid Leave',UL:'Unpaid Leave',WO:'Weekly Off',H:'Holiday'};
+const WCATS=['Mason','Helper','Carpenter','Electrician','Plumber','Painter','Welder','Tile Worker','Bar Bender','Shuttering Worker','Machine Operator','Supervisor','Other'];
+const SKILLS=['Skilled','Semi-Skilled','Unskilled'];
+const PAYPREF=['Cash','UPI','Bank Transfer'];
+const SITESTAT=['Active','Completed','On Hold'];
+const DEDCATS=['Advance Recovery','Loan Recovery','Material / Tool Damage Recovery','Other Authorized Deduction','Other Adjustment'];
+const DAYNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+let db=null, cache={}, cur='dashboard';
+const F={dash:{date:''},att:{date:'',site:'',cat:'',all:false},sal:{date:'',site:'',worker:'',cat:''},rep:{type:'daily',from:'',to:'',site:'',worker:'',cat:''}};
+
+function defaultDB(){return{version:1,settings:{company:'VIJAY CONSTRUCTIONS',currency:'₹',weekStart:1,stdHours:8,defWage:600,defOT:100,weekOff:0,paidWO:true,paidH:true,rules:{P:1,HD:0.5,A:0,PL:1,UL:0}},
+ workers:[],sites:[],attendance:[],advances:[],deductions:[],payments:[],settlements:{},salaryInputs:{},audit:[],counters:{W:0,S:0,ADV:0,DED:0,PAY:0,ATT:0}}}
+function load(){
+ let s=null;try{if(typeof localStorage!=='undefined')s=localStorage.getItem(KEY)}catch(e){}
+ if(s){try{db=Object.assign(defaultDB(),JSON.parse(s))}catch(e){db=null}}
+ if(!db){db=defaultDB();loadDemo();save()}
+ db.settings=Object.assign(defaultDB().settings,db.settings);db.settings.rules=Object.assign(defaultDB().settings.rules,db.settings.rules||{});
+ db.counters=Object.assign(defaultDB().counters,db.counters||{});
+}
+function save(){cache={};try{if(typeof localStorage!=='undefined')localStorage.setItem(KEY,JSON.stringify(db))}catch(e){if(typeof alert!=='undefined')alert('Could not save to browser storage (storage full or blocked). Download a backup immediately.')}}
+/* helpers */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const r2=n=>Math.round(((+n||0)+Number.EPSILON)*100)/100;
+const money=n=>db.settings.currency+' '+r2(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=n=>r2(n).toLocaleString('en-IN',{maximumFractionDigits:2});
+const pad=n=>String(n).padStart(2,'0');
+const ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const pd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const addDays=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return ds(d)};
+const today=()=>ds(new Date());
+const nowTs=()=>new Date().toISOString();
+const dfmt=s=>{if(!s)return'';const d=pd(s);return pad(d.getDate())+'-'+pad(d.getMonth()+1)+'-'+d.getFullYear()};
+const weekStartOf=s=>{const d=pd(s);return addDays(s,-((d.getDay()-db.settings.weekStart+7)%7))};
+const sum=(a,k)=>r2(a.reduce((s,x)=>s+(+x[k]||0),0));
+const W=id=>db.workers.find(w=>w.id===id), S=id=>db.sites.find(s=>s.id===id);
+const wName=id=>{const w=W(id);return w?w.name:id};
+const sName=id=>{const s=S(id);return s?s.name:(id||'—')};
+const numOr=(v,d)=>(v===''||v==null||isNaN(+v))?d:+v;
+const rateOf=w=>numOr(w.wage,db.settings.defWage), otRateOf=w=>numOr(w.otRate,db.settings.defOT), stdOf=w=>numOr(w.std,db.settings.stdHours);
+function nextId(t,prefix,width){db.counters[t]=(db.counters[t]||0)+1;return prefix+String(db.counters[t]).padStart(width,'0')}
+function audit(action,ref,detail){db.audit.push({ts:nowTs(),action,ref,detail:detail||''});if(db.audit.length>1500)db.audit.splice(0,db.audit.length-1500)}
+function dayVal(st){const s=db.settings;if(st==='WO')return s.paidWO?1:0;if(st==='H')return s.paidH?1:0;return +s.rules[st]||0}
+const demoB=o=>o&&o.demo?' <span class="badge demo">DEMO</span>':'';
+function opts(arr,sel,blank){return(blank!==undefined?`<option value="">${esc(blank)}</option>`:'')+arr.map(x=>{const v=Array.isArray(x)?x[0]:x,l=Array.isArray(x)?x[1]:x;return`<option value="${esc(v)}"${String(v)===String(sel)?' selected':''}>${esc(l)}</option>`}).join('')}
+const workerOpts=(sel,blank,onlyAct)=>opts(db.workers.filter(w=>!onlyAct||w.status==='Active').map(w=>[w.id,w.id+' – '+w.name]),sel,blank);
+const siteOpts=(sel,blank)=>opts(db.sites.map(s=>[s.id,s.name+(s.status!=='Active'?' ('+s.status+')':'')]),sel,blank);
+
+/* =====================  CALCULATION ENGINE  ===================== */
+function recompute(a){a.days=dayVal(a.status);a.wage=r2(a.rate*a.days);a.otAmt=(a.ot>0&&(a.status==='P'||a.status==='HD'))?r2(a.ot*a.otRate):0}
+/* effective attendance: if a worker is marked at 2 sites on one date, only one day's wage (max single-day rate) is counted */
+function effAll(){
+ if(cache.eff)return cache.eff;
+ const g={};db.attendance.forEach(a=>{(g[a.workerId+'|'+a.date]=g[a.workerId+'|'+a.date]||[]).push(a)});
+ const out=[];
+ for(const k in g){const L=g[k];
+  if(L.length===1){const a=L[0];out.push(Object.assign({},a,{cDays:a.days,cWage:a.wage,cOT:a.otAmt,cOTh:a.otAmt>0?a.ot:0,conflict:false}));continue}
+  const sw=L.reduce((s,a)=>s+a.wage,0),mr=Math.max(...L.map(a=>a.rate)),f=(sw>mr&&sw>0)?mr/sw:1,mo=Math.max(...L.map(a=>a.otAmt));let used=false;
+  L.forEach(a=>{let ot=0,oh=0;if(!used&&a.otAmt>0&&a.otAmt===mo){ot=a.otAmt;oh=a.ot;used=true}
+   out.push(Object.assign({},a,{cDays:r2(a.days*f),cWage:r2(a.wage*f),cOT:ot,cOTh:oh,conflict:true}))});
+ }
+ return cache.eff=out;
+}
+function calcWorkerWeek(wid,ws){
+ const we=addDays(ws,6);
+ const recs=effAll().filter(a=>a.workerId===wid&&a.date>=ws&&a.date<=we);
+ const cnt={P:0,HD:0,A:0,PL:0,UL:0,WO:0,H:0};recs.forEach(a=>{cnt[a.status]=(cnt[a.status]||0)+1});
+ const basic=sum(recs,'cWage'),ot=sum(recs,'cOT'),otH=sum(recs,'cOTh'),days=sum(recs,'cDays');
+ const inp=db.salaryInputs[ws+'|'+wid]||{};
+ const inc=r2(inp.inc),bon=r2(inp.bonus),oe=r2(inp.other),adj=r2(inp.adj);
+ const gross=r2(basic+ot+inc+bon+oe);
+ const dl=db.deductions.filter(d=>d.workerId===wid&&d.date>=ws&&d.date<=we&&d.status==='Approved');
+ const by=c=>sum(dl.filter(d=>d.category===c),'amount');
+ const advRec=by(DEDCATS[0]),loan=by(DEDCATS[1]),dmg=by(DEDCATS[2]),oth=r2(by(DEDCATS[3])+by(DEDCATS[4]));
+ const totalDed=r2(advRec+loan+dmg+oth);
+ const sites=[...new Set(recs.filter(a=>a.cDays>0||a.cOT>0).map(a=>a.siteId))];
+ return{wid,ws,we,cnt,days,otH,basic,ot,inc,bon,oe,adj,adjReason:inp.adjReason||'',gross,advRec,loan,dmg,oth,totalDed,net:r2(gross+adj-totalDed),sites,conflicts:recs.filter(a=>a.conflict).length};
+}
+const weekCalc=(wid,ws)=>{const st=db.settlements[ws+'|'+wid];return st&&st.approved?st.snap:calcWorkerWeek(wid,ws)};
+function firstWeek(wid){let m=null;const t=d=>{if(d&&(!m||d<m))m=d};
+ db.attendance.forEach(a=>a.workerId===wid&&t(a.date));db.deductions.forEach(a=>a.workerId===wid&&t(a.date));db.payments.forEach(a=>a.workerId===wid&&t(a.week));
+ Object.keys(db.salaryInputs).forEach(k=>{const p=k.split('|');if(p[1]===wid)t(p[0])});return m?weekStartOf(m):null}
+function prevOutstanding(wid,ws){
+ const f=firstWeek(wid);let net=0;if(f){for(let w=f;w<ws;w=addDays(w,7))net+=weekCalc(wid,w).net}
+ return r2(net-sum(db.payments.filter(p=>p.workerId===wid&&p.week<ws),'amount'));
+}
+function weekRow(wid,ws){
+ const key=ws+'|'+wid,st=db.settlements[key],live=calcWorkerWeek(wid,ws),c=(st&&st.approved)?st.snap:live;
+ const prev=prevOutstanding(wid,ws),paid=sum(db.payments.filter(p=>p.workerId===wid&&p.week===ws),'amount');
+ const stale=!!(st&&st.approved&&(live.net!==st.snap.net||live.basic!==st.snap.basic||live.ot!==st.snap.ot||live.totalDed!==st.snap.totalDed));
+ return Object.assign({},c,{prev,due:r2(prev+c.net),paid,closing:r2(prev+c.net-paid),approved:!!(st&&st.approved),stale,key});
+}
+function weekWorkers(ws,site,cat,worker){
+ const we=addDays(ws,6),out=[];
+ db.workers.forEach(w=>{
+  if(cat&&w.cat!==cat)return;if(worker&&w.id!==worker)return;
+  if(site&&!db.attendance.some(a=>a.workerId===w.id&&a.siteId===site&&a.date>=ws&&a.date<=we))return;
+  const r=weekRow(w.id,ws);
+  const act=effAll().some(a=>a.workerId===w.id&&a.date>=ws&&a.date<=we)||db.deductions.some(d=>d.workerId===w.id&&d.date>=ws&&d.date<=we)||db.payments.some(p=>p.workerId===w.id&&p.week===ws)||db.salaryInputs[ws+'|'+w.id];
+  if(act||Math.abs(r.prev)>0.004||Math.abs(r.net)>0.004)out.push(r);
+ });return out;
+}
+const advGiven=(wid,to,from)=>sum(db.advances.filter(a=>a.workerId===wid&&(!to||a.date<=to)&&(!from||a.date>=from)),'amount');
+const advRecov=(wid,to,from,excl)=>sum(db.deductions.filter(d=>d.id!==excl&&d.workerId===wid&&d.category===DEDCATS[0]&&d.status==='Approved'&&(!to||d.date<=to)&&(!from||d.date>=from)),'amount');
+const advBal=(wid,to)=>r2(advGiven(wid,to)-advRecov(wid,to));
+const dayMap=d=>{const m={};effAll().filter(a=>a.date===d).forEach(a=>{if(!m[a.workerId]||a.cDays>m[a.workerId].cDays)m[a.workerId]=a});return m};
+
+/* =====================  UI HELPERS  ===================== */
+function toast(m,err){const t=$('toast');t.textContent=m;t.className=err?'err':'';t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',err?Math.max(4500,String(m).length*55):2600)}
+window.alert=function(m){toast(String(m),true)};
+function busy(on){const b=$('busy');if(b)b.style.display=on?'flex':'none'}
+function openModal(title,body,wide){$('modal').innerHTML=`<div class="mbox${wide?' wide':''}"><div class="mh"><b>${title}</b><button class="x" onclick="closeModal()">✕</button></div><div class="mb">${body}</div></div>`;$('modal').style.display='flex'}
+function closeModal(){$('modal').style.display='none';$('modal').innerHTML=''}
+function tbl(heads,rows,cls){return`<div class="tw"><table class="t ${cls||''}"><thead><tr>${heads.map(h=>`<th${h[0]==='#'?' class="n"':''}>${esc(h.replace(/^#/,''))}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${heads.length}" style="text-align:center;color:#7a8794;padding:18px">No records found.</td></tr>`}</tbody></table></div>`}
+function downloadFile(name,text,mime){const b=new Blob([text],{type:mime||'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+const csvCell=v=>{v=v==null?'':String(v);return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const toCSV=(heads,rows)=>'\ufeff'+[heads.map(csvCell).join(',')].concat(rows.map(r=>r.map(csvCell).join(','))).join('\r\n');
+function printHTML(h){$('printRoot').innerHTML=h;window.print()}
+const compHead=()=>`<div style="text-align:center;margin-bottom:6px"><div style="font-size:20px;font-weight:700;color:#0b2e59">${esc(db.settings.company)}</div></div>`;
+
+/* =====================  NAVIGATION  ===================== */
+const PAGES=[['dashboard','Dashboard',pgDashboard],['workers','Worker Master',pgWorkers],['sites','Site Master',pgSites],['attendance','Daily Attendance',pgAttendance],['salary','Weekly Salary',pgSalary],['advances','Advances',pgAdvances],['deductions','Deductions',pgDeductions],['payments','Payment Transactions',pgPayments],['reports','Reports',pgReports],['settings','Settings',pgSettings],['backup','Backup & Restore',pgBackup],['more','More',pgMore]];
+const MOREPG=['sites','salary','advances','deductions','reports','settings','backup','more'];
+const NAVI={dashboard:'🏠',workers:'👷',sites:'🏗️',attendance:'✅',salary:'🧾',advances:'💵',deductions:'➖',payments:'💰',reports:'📊',settings:'⚙️',backup:'💾'};
+function renderNav(){
+ $('nav').innerHTML=PAGES.filter(p=>p[0]!=='more').map((p,i)=>`<button class="${p[0]===cur?'on':''}" onclick="go('${p[0]}')">${NAVI[p[0]]} ${i+1}. ${p[1]}</button>`).join('');
+ const b=[['dashboard','🏠','Home'],['attendance','✅','Attendance'],['workers','👷','Workers'],['payments','💰','Payments'],['more','☰','More']];
+ $('bnav').innerHTML=b.map(x=>`<button class="${(x[0]===cur||(x[0]==='more'&&MOREPG.includes(cur)))?'on':''}" onclick="go('${x[0]}')"><i>${x[1]}</i><span>${x[2]}</span></button>`).join('');
+}
+function go(p){cur=p;renderNav();$('side').classList.remove('open');PAGES.find(x=>x[0]===p)[2]();window.scrollTo(0,0)}
+const refresh=()=>go(cur);
+const head=(t,s)=>`<h2>${t}</h2><div class="sub">${s||''}</div>`+(db.workers.some(w=>w.demo)&&cur==='dashboard'?`<div class="demo-banner"><b>DEMO DATA is loaded</b> so you can see how everything works. Before real use, go to <a href="#" onclick="go('backup');return false">Backup & Restore</a> and press “Remove Demo Data”.</div>`:'');
+
+/* =====================  DASHBOARD  ===================== */
+function pgDashboard(){
+ if(!F.dash.date)F.dash.date=today();
+ const d=F.dash.date,ws=weekStartOf(d),we=addDays(ws,6);
+ const dm=dayMap(d),cnt={P:0,HD:0,A:0,L:0};Object.values(dm).forEach(a=>{if(a.status==='P')cnt.P++;else if(a.status==='HD')cnt.HD++;else if(a.status==='A')cnt.A++;else if(a.status==='PL'||a.status==='UL')cnt.L++});
+ const rows=weekWorkers(ws);
+ const advWeek=sum(db.advances.filter(a=>a.date>=ws&&a.date<=we),'amount');
+ const T={gross:sum(rows,'gross'),ot:sum(rows,'ot'),advRec:sum(rows,'advRec'),oth:r2(sum(rows,'loan')+sum(rows,'dmg')+sum(rows,'oth')),net:sum(rows,'net'),paid:sum(rows,'paid'),closing:sum(rows,'closing')};
+ const card=(l,v,c)=>`<div class="card ${c||''}"><small>${l}</small><b>${v}</b></div>`;
+ const eff=effAll().filter(a=>a.date>=ws&&a.date<=we);
+ const siteRows=db.sites.map(s=>{const L=eff.filter(a=>a.siteId===s.id);return`<tr><td>${esc(s.name)}${demoB(s)}</td><td class="n">${new Set(L.filter(a=>a.cDays>0).map(a=>a.workerId)).size}</td><td class="n">${money(sum(L,'cWage')+sum(L,'cOT'))}</td></tr>`}).join('');
+ const sc={};eff.forEach(a=>sc[a.status]=(sc[a.status]||0)+1);
+ const recentPay=[...db.payments].sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id)).slice(0,6).map(p=>`<tr><td>${dfmt(p.date)}</td><td>${esc(wName(p.workerId))}${demoB(p)}</td><td>${esc(p.mode)}</td><td class="n">${money(p.amount)}</td></tr>`).join('');
+ const recentAdv=[...db.advances].sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id)).slice(0,6).map(p=>`<tr><td>${dfmt(p.date)}</td><td>${esc(wName(p.workerId))}${demoB(p)}</td><td>${esc(p.mode)}</td><td class="n">${money(p.amount)}</td></tr>`).join('');
+ const osSal=rows.filter(r=>r.closing>0.004).map(r=>`<tr><td>${esc(wName(r.wid))}</td><td class="n">${money(r.closing)}</td></tr>`).join('');
+ const osAdv=db.workers.map(w=>[w,advBal(w.id)]).filter(x=>x[1]>0.004).map(x=>`<tr><td>${esc(x[0].name)}</td><td class="n">${money(x[1])}</td></tr>`).join('');
+ $('main').innerHTML=head('Dashboard','Live figures calculated from your records. Week: <b>'+dfmt(ws)+' to '+dfmt(we)+'</b>')+
+ `<div class="warn">⚠ Data is stored in this browser only. It is not automatically synchronized with other devices. Download regular backups.</div>
+ <div class="qa"><button class="btn g" onclick="go('attendance')">✅ Mark Attendance</button><button class="btn" onclick="go('workers');workerForm()">👷 Add Worker</button><button class="btn" onclick="advForm()">💵 Give Advance</button><button class="btn" onclick="payForm()">💰 Record Payment</button><button class="btn o" onclick="go('salary')">🧾 Weekly Salary</button></div>
+ <div class="bar"><label>Date / Week<input type="date" id="dd" value="${d}" onchange="F.dash.date=this.value||today();go('dashboard')"></label>
+ <button class="btn o" onclick="F.dash.date=addDays('${ws}',-7);go('dashboard')">◀ Previous Week</button><button class="btn o" onclick="F.dash.date=addDays('${ws}',7);go('dashboard')">Next Week ▶</button><button class="btn o" onclick="F.dash.date=today();go('dashboard')">Today</button></div>
+ <h3>Workers (on ${dfmt(d)})</h3><div class="cards">${card('Active Workers',db.workers.filter(w=>w.status==='Active').length)}${card('Inactive Workers',db.workers.filter(w=>w.status!=='Active').length)}${card('Active Sites',db.sites.filter(s=>s.status==='Active').length)}${card('Present',cnt.P,'g')}${card('Absent',cnt.A,'r')}${card('Half Day',cnt.HD,'a')}${card('On Leave',cnt.L,'a')}</div>
+ <h3>Weekly Financial Summary</h3><div class="cards">${card('Gross Wages (incl. OT & extras)',money(T.gross))}${card('Overtime',money(T.ot))}${card('Advances Given (week)',money(advWeek),'a')}${card('Total Advance Outstanding',money(db.workers.reduce((s,w)=>s+advBal(w.id),0)),'a')}${card('Advance Recoveries',money(T.advRec))}${card('Other Deductions',money(T.oth))}${card('Current Week Salary (Net Payable)',money(T.net),'g')}${card('Salary Paid',money(T.paid),'g')}${card('Salary Outstanding (closing)',money(T.closing),'r')}</div>
+ <div class="two"><div><h3>Site-wise Workers & Labour Cost</h3>${tbl(['Site','#Workers','#Labour Cost'],siteRows)}</div>
+ <div><h3>Current Week Attendance</h3>${tbl(['Status','#Entries'],Object.keys(STATUSES).map(k=>`<tr><td>${STATUSES[k]}</td><td class="n">${sc[k]||0}</td></tr>`).join(''))}</div></div>
+ <div class="two"><div><h3>Recent Payments</h3>${tbl(['Date','Worker','Mode','#Amount'],recentPay)}</div><div><h3>Recent Advances</h3>${tbl(['Date','Worker','Mode','#Amount'],recentAdv)}</div></div>
+ <div class="two"><div><h3>Workers with Outstanding Salary</h3>${tbl(['Worker','#Outstanding'],osSal)}</div><div><h3>Workers with Outstanding Advance</h3>${tbl(['Worker','#Advance Balance'],osAdv)}</div></div>`;
+}
+
+/* =====================  WORKER MASTER  ===================== */
+F.wk={q:'',site:'',cat:'',st:''};
+function pgWorkers(){
+ $('main').innerHTML=head('Worker Master','Add, edit and view workers. Workers with records are never deleted – mark them Inactive instead.')+
+ `<div class="bar"><button class="btn g" style="flex:1 1 100%;min-height:52px;font-size:16px" onclick="workerForm()">+ Add Worker</button>
+ <label>Search<input id="wq" placeholder="Name / ID / mobile" value="${esc(F.wk.q)}" oninput="F.wk.q=this.value;drawWorkers()"></label>
+ <label>Site<select id="wsite" onchange="F.wk.site=this.value;drawWorkers()">${siteOpts(F.wk.site,'All')}</select></label>
+ <label>Category<select onchange="F.wk.cat=this.value;drawWorkers()">${opts(WCATS,F.wk.cat,'All')}</select></label>
+ <label>Status<select onchange="F.wk.st=this.value;drawWorkers()">${opts(['Active','Inactive'],F.wk.st,'All')}</select></label></div><div id="res"></div>`;
+ drawWorkers();
+}
+function drawWorkers(){
+ const f=F.wk,q=f.q.toLowerCase();
+ const L=db.workers.filter(w=>(!q||(w.name+w.id+(w.mobile||'')).toLowerCase().includes(q))&&(!f.site||w.siteId===f.site)&&(!f.cat||w.cat===f.cat)&&(!f.st||w.status===f.st));
+ $('res').innerHTML=L.length?'<div class="gridc">'+L.map(w=>`<div class="pc ${w.status==='Active'?'':'inact'}"><div class="pch"><div><b>${esc(w.name)}</b>${demoB(w)}<div class="sub" style="margin:0">${w.id}</div></div><span class="badge ${w.status==='Active'?'ok':'bad'}">${w.status}</span></div>
+ <div class="pg"><div><small>Category</small>${esc(w.cat)}</div><div><small>Daily wage</small><b>${money(rateOf(w))}</b></div><div><small>Site</small>${esc(sName(w.siteId))}</div><div><small>Mobile</small>${w.mobile?`<a href="tel:${esc(w.mobile)}">${esc(w.mobile)}</a>`:'—'}</div></div>
+ <div class="pa"><button class="btn s o" onclick="viewWorker('${w.id}')">View</button><button class="btn s" onclick="workerForm('${w.id}')">Edit</button><button class="btn s ${w.status==='Active'?'r':'g'}" onclick="toggleWorker('${w.id}')">${w.status==='Active'?'Deactivate':'Activate'}</button></div></div>`).join('')+'</div>':'<div class="warn">No workers found. Tap “+ Add Worker” to add one.</div>';
+}
+function workerForm(id){
+ const w=id?W(id):{name:'',mobile:'',address:'',cat:'Helper',skill:'Unskilled',wage:'',otRate:'',std:'',joined:today(),siteId:'',pay:'Cash',ref:'',status:'Active'};
+ const f=(k,l,inp)=>`<label>${l}${inp}</label>`;
+ openModal(id?'Edit Worker '+id:'Add Worker',`<div class="fg">
+ ${f('name','Worker Name *',`<input id="wf_name" value="${esc(w.name)}">`)}${f('mobile','Mobile Number',`<input id="wf_mobile" value="${esc(w.mobile)}" inputmode="tel">`)}
+ <label class="full">Address<input id="wf_address" value="${esc(w.address)}"></label>
+ <label>Worker Category<select id="wf_cat">${opts(WCATS,w.cat)}</select></label><label>Skill Level<select id="wf_skill">${opts(SKILLS,w.skill)}</select></label>
+ <label>Daily Wage Rate (blank = default ${db.settings.defWage})<input id="wf_wage" type="number" min="0" step="any" value="${esc(w.wage)}"></label>
+ <label>Overtime Rate / Hour (blank = default ${db.settings.defOT})<input id="wf_otRate" type="number" min="0" step="any" value="${esc(w.otRate)}"></label>
+ <label>Standard Working Hours (blank = default ${db.settings.stdHours})<input id="wf_std" type="number" min="0" step="any" value="${esc(w.std)}"></label>
+ <label>Joining Date<input id="wf_joined" type="date" value="${esc(w.joined)}"></label>
+ <label>Assigned Site<select id="wf_siteId">${siteOpts(w.siteId,'— None —')}</select></label>
+ <label>Payment Preference<select id="wf_pay">${opts(PAYPREF,w.pay)}</select></label>
+ <label>Bank / UPI Reference (optional)<input id="wf_ref" value="${esc(w.ref)}"></label>
+ <label>Worker Status<select id="wf_status">${opts(['Active','Inactive'],w.status)}</select></label></div>
+ ${id?'<p class="sub">Rate changes apply to attendance entered from now on. Existing attendance keeps the rate it was recorded with.</p>':''}
+ <p><button class="btn g" onclick="saveWorker('${id||''}')">Save Worker</button><button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+}
+function saveWorker(id){
+ const g=k=>$('wf_'+k).value.trim();const name=g('name');
+ if(!name)return alert('Worker name is required.');
+ const mob=g('mobile');if(mob&&!/^[+\d][\d\s-]{8,14}$/.test(mob))return alert('Enter a valid mobile number (10 digits).');
+ for(const k of['wage','otRate','std']){if(g(k)!==''&&(isNaN(+g(k))||+g(k)<0))return alert('Wage, overtime rate and hours must be positive numbers.')}
+ if(db.workers.some(w=>w.id!==id&&w.name.toLowerCase()===name.toLowerCase()&&(w.mobile||'')===mob))return alert('A worker with the same name and mobile number already exists.');
+ const o={name,mobile:mob,address:g('address'),cat:g('cat'),skill:g('skill'),wage:g('wage'),otRate:g('otRate'),std:g('std'),joined:g('joined'),siteId:g('siteId'),pay:g('pay'),ref:g('ref'),status:g('status')};
+ if(id){const w=W(id);Object.assign(w,o);audit('Worker edited',id,name)}else{o.id=nextId('W','W-',4);o.created=nowTs();db.workers.push(o);audit('Worker added',o.id,name)}
+ save();closeModal();toast('Worker saved');refresh();
+}
+function toggleWorker(id){const w=W(id);w.status=w.status==='Active'?'Inactive':'Active';audit('Worker status',id,w.status);save();refresh()}
+function viewWorker(id){
+ const w=W(id),ws=weekStartOf(today());
+ const cnt={};db.attendance.filter(a=>a.workerId===id).forEach(a=>{const k=sName(a.siteId);cnt[k]=cnt[k]||{P:0,HD:0,PL:0,UL:0,A:0,WO:0,H:0,wage:0};cnt[k][a.status]++;cnt[k].wage+=a.wage+a.otAmt});
+ const attRows=Object.keys(cnt).map(k=>`<tr><td>${esc(k)}</td><td class="n">${cnt[k].P}</td><td class="n">${cnt[k].HD}</td><td class="n">${cnt[k].PL}</td><td class="n">${cnt[k].UL}</td><td class="n">${cnt[k].A}</td><td class="n">${money(cnt[k].wage)}</td></tr>`).join('');
+ const pays=db.payments.filter(p=>p.workerId===id).sort((a,b)=>b.date.localeCompare(a.date)).map(p=>`<tr><td>${dfmt(p.date)}</td><td>${dfmt(p.week)}</td><td>${esc(p.mode)}</td><td>${esc(p.ref)}</td><td class="n">${money(p.amount)}</td></tr>`).join('');
+ const r=weekRow(id,ws);
+ openModal('Worker '+id+' – '+esc(w.name),`<div class="kv"><span>Name</span><span>${esc(w.name)}${demoB(w)}</span><span>Mobile</span><span>${esc(w.mobile)}</span><span>Address</span><span>${esc(w.address)}</span><span>Category / Skill</span><span>${esc(w.cat)} / ${esc(w.skill)}</span><span>Daily wage / OT</span><span>${money(rateOf(w))} / ${money(otRateOf(w))} per hr</span><span>Standard hours</span><span>${stdOf(w)}</span><span>Joined</span><span>${dfmt(w.joined)}</span><span>Assigned site</span><span>${esc(sName(w.siteId))}</span><span>Payment pref.</span><span>${esc(w.pay)} ${esc(w.ref)}</span><span>Status</span><span>${w.status}</span><span>Advance balance</span><span><b>${money(advBal(id))}</b></span><span>Salary outstanding (this week closing)</span><span><b>${money(r.closing)}</b></span></div>
+ <h3>Attendance History by Site</h3>${tbl(['Site','#P','#HD','#PL','#UL','#A','#Earned'],attRows)}<h3>Payment History</h3>${tbl(['Date','Salary Week','Mode','Reference','#Amount'],pays)}`,true);
+}
+
+/* =====================  SITE MASTER  ===================== */
+function pgSites(){
+ const eff=effAll();
+ $('main').innerHTML=head('Site Master','Construction sites. Attendance and wages are always linked to the site where the worker actually worked.')+`<div class="bar"><button class="btn g" style="flex:1 1 100%;min-height:52px;font-size:16px" onclick="siteForm()">+ Add Site</button></div>`+
+ (db.sites.length?'<div class="gridc">'+db.sites.map(s=>{const L=eff.filter(a=>a.siteId===s.id);const nw=db.workers.filter(w=>w.siteId===s.id&&w.status==='Active').length;
+ return`<div class="pc ${s.status==='Active'?'':'inact'}"><div class="pch"><div><b>${esc(s.name)}</b>${demoB(s)}<div class="sub" style="margin:0">${s.id}</div></div><span class="badge ${s.status==='Active'?'ok':s.status==='Completed'?'':'warn'}">${s.status}</span></div>
+ <div class="pg"><div><small>Client / Project</small>${esc(s.client)||'—'}</div><div><small>Location</small>${esc(s.loc)||'—'}</div><div><small>Supervisor</small>${esc(s.sup)||'—'}</div><div><small>Assigned workers</small><b>${nw}</b></div><div><small>Start</small>${dfmt(s.start)||'—'}</div><div><small>Labour cost (all time)</small><b>${money(sum(L,'cWage')+sum(L,'cOT'))}</b></div></div>
+ <div class="pa"><button class="btn s o" onclick="viewSite('${s.id}')">Workers / Cost</button><button class="btn s g" onclick="F.att.site='${s.id}';go('attendance')">Attendance</button><button class="btn s" onclick="siteForm('${s.id}')">Edit</button><button class="btn s ${s.status==='Active'?'r':'g'}" onclick="toggleSite('${s.id}')">${s.status==='Active'?'Deactivate':'Activate'}</button></div></div>`}).join('')+'</div>':'<div class="warn">No sites yet. Tap “+ Add Site”.</div>');
+}
+function siteForm(id){
+ const s=id?S(id):{name:'',client:'',loc:'',sup:'',start:today(),exp:'',end:'',status:'Active'};
+ openModal(id?'Edit Site '+id:'Add Site',`<div class="fg"><label>Site Name *<input id="sf_name" value="${esc(s.name)}"></label><label>Project / Client Name<input id="sf_client" value="${esc(s.client)}"></label>
+ <label>Site Location<input id="sf_loc" value="${esc(s.loc)}"></label><label>Site Supervisor (pick or type)<input id="sf_sup" list="supdl" value="${esc(s.sup)}" autocomplete="off"><datalist id="supdl">${db.workers.filter(w=>w.status==='Active').sort((a,b)=>(b.cat==='Supervisor')-(a.cat==='Supervisor')).map(w=>`<option value="${esc(w.name)}">${esc(w.cat)}</option>`).join('')}</datalist></label>
+ <label>Start Date<input id="sf_start" type="date" value="${esc(s.start)}"></label><label>Expected Completion<input id="sf_exp" type="date" value="${esc(s.exp)}"></label>
+ <label>Actual Completion<input id="sf_end" type="date" value="${esc(s.end)}"></label><label>Site Status<select id="sf_status">${opts(SITESTAT,s.status)}</select></label></div>
+ <p><button class="btn g" onclick="saveSite('${id||''}')">Save Site</button><button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+}
+function saveSite(id){
+ const g=k=>$('sf_'+k).value.trim();if(!g('name'))return alert('Site name is required.');
+ if(db.sites.some(s=>s.id!==id&&s.name.toLowerCase()===g('name').toLowerCase()))return alert('A site with this name already exists.');
+ if(g('start')&&g('exp')&&g('exp')<g('start'))return alert('Expected completion cannot be before the start date.');
+ const o={name:g('name'),client:g('client'),loc:g('loc'),sup:g('sup'),start:g('start'),exp:g('exp'),end:g('end'),status:g('status')};
+ if(id){Object.assign(S(id),o);audit('Site edited',id,o.name)}else{o.id=nextId('S','S-',3);db.sites.push(o);audit('Site added',o.id,o.name)}
+ save();closeModal();toast('Site saved');refresh();
+}
+function toggleSite(id){const s=S(id);s.status=s.status==='Active'?'On Hold':'Active';audit('Site status',id,s.status);save();refresh()}
+function viewSite(id){
+ const s=S(id),eff=effAll().filter(a=>a.siteId===id);
+ const wids=[...new Set(eff.map(a=>a.workerId).concat(db.workers.filter(w=>w.siteId===id).map(w=>w.id)))];
+ const wr=wids.map(wid=>{const L=eff.filter(a=>a.workerId===wid);return`<tr><td>${wid}</td><td>${esc(wName(wid))}</td><td>${esc((W(wid)||{}).cat)}</td><td class="n">${sum(L,'cDays')}</td><td class="n">${money(sum(L,'cWage')+sum(L,'cOT'))}</td></tr>`}).join('');
+ const dates=[...new Set(eff.map(a=>a.date))].sort().reverse().slice(0,15).map(d=>{const L=eff.filter(a=>a.date===d);return`<tr><td>${dfmt(d)}</td><td class="n">${L.filter(a=>a.status==='P').length}</td><td class="n">${L.filter(a=>a.status==='HD').length}</td><td class="n">${L.filter(a=>a.status==='A').length}</td><td class="n">${money(sum(L,'cWage')+sum(L,'cOT'))}</td></tr>`}).join('');
+ openModal('Site '+id+' – '+esc(s.name),`<div class="kv"><span>Client</span><span>${esc(s.client)}</span><span>Location</span><span>${esc(s.loc)}</span><span>Supervisor</span><span>${esc(s.sup)}</span><span>Status</span><span>${s.status}</span><span>Total labour expense</span><span><b>${money(sum(eff,'cWage')+sum(eff,'cOT'))}</b></span></div>
+ <h3>Site-wise Workers</h3>${tbl(['ID','Worker','Category','#Wage Days','#Labour Cost'],wr)}<h3>Recent Attendance (last 15 dates)</h3>${tbl(['Date','#Present','#Half Day','#Absent','#Labour Cost'],dates)}`,true);
+}
+
+/* =====================  DAILY ATTENDANCE  ===================== */
+function attWorkers(){
+ const {date,site,all}=F.att;
+ return db.workers.filter(w=>{
+  const has=db.attendance.some(a=>a.workerId===w.id&&a.date===date&&a.siteId===site);
+  return has||(w.status==='Active'&&(all||w.siteId===site));
+ });
+}
+function pgAttendance(){
+ if(!F.att.date)F.att.date=today();
+ const a=F.att;
+ $('main').innerHTML=head('Daily Attendance','1) Pick date  2) Pick site  3) Tap a status for each worker  4) Save.')+
+ `<div class="bar"><label>Attendance Date<input type="date" id="ad" value="${a.date}" onchange="F.att.date=this.value;pgAttendance()"></label>
+ <label>Construction Site<select id="as" onchange="F.att.site=this.value;pgAttendance()">${siteOpts(a.site,'— Select Site —')}</select></label></div>
+ <label class="chk"><input type="checkbox" ${a.all?'checked':''} onchange="F.att.all=this.checked;pgAttendance()"> Show all active workers (not only this site's)</label>
+ <div id="grid"></div>
+ <details class="logbox"><summary>📋 Attendance Log – view / correct previous attendance</summary>
+ <div class="tbar"><label>From<input type="date" id="lf" value="${F.attLog?F.attLog.from:addDays(a.date,-6)}" onchange="drawAttLog()"></label><label>To<input type="date" id="lt" value="${F.attLog?F.attLog.to:a.date}" onchange="drawAttLog()"></label>
+ <label>Site<select id="ls" onchange="drawAttLog()">${siteOpts('','All')}</select></label><label>Worker<select id="lw" onchange="drawAttLog()">${workerOpts('','All')}</select></label></div><div id="alog"></div></details>`;
+ drawGrid();drawAttLog();
+}
+const SB=[['P','✔','Present'],['HD','½','Half Day'],['A','✖','Absent'],['L','🌴','Leave'],['WO','🛌','Week Off']];
+const LV=[['PL','Paid Leave'],['UL','Unpaid Leave'],['H','Holiday']];
+const isLv=s=>s==='PL'||s==='UL'||s==='H';
+function drawGrid(){
+ const a=F.att;if(!a.site){$('grid').innerHTML='<div class="warn">👆 Select a construction site to start marking attendance.</div>';return}
+ const dow=pd(a.date).getDay(),L=attWorkers();
+ const cards=L.map(w=>{
+  const ex=db.attendance.find(x=>x.workerId===w.id&&x.date===a.date&&x.siteId===a.site);
+  const other=db.attendance.filter(x=>x.workerId===w.id&&x.date===a.date&&x.siteId!==a.site);
+  const st=ex?ex.status:'';
+  return`<div class="wc" id="wc_${w.id}" data-st="${st}" data-name="${esc((w.name+' '+w.id).toLowerCase())}" data-cat="${esc(w.cat)}">
+  <div class="wch"><div><b>${esc(w.name)}</b>${demoB(w)}${ex?' <span class="badge ok">saved</span>':''}<div class="sub" style="margin:0">${w.id} · ${esc(w.cat)} · ${money(rateOf(w))}/day</div></div><div class="wamt" id="wg_${w.id}">${ex?money(ex.wage+ex.otAmt):'—'}</div></div>
+  ${other.length?`<div style="margin-bottom:6px"><span class="badge bad">⚠ also marked at ${esc(other.map(o=>sName(o.siteId)).join(', '))}</span></div>`:''}
+  <input type="hidden" id="st_${w.id}" value="${st}">
+  <div class="sbtn">${SB.map(b=>`<button type="button" data-k="${b[0]}" onclick="tapSt('${w.id}','${b[0]}')"><i>${b[1]}</i>${b[2]}</button>`).join('')}</div>
+  <div class="lv" id="lv_${w.id}">${LV.map(b=>`<button type="button" data-k="${b[0]}" onclick="setSt('${w.id}','${b[0]}')">${b[1]}</button>`).join('')}</div>
+  <div class="wf"><label>Overtime hours<input id="ot_${w.id}" type="number" inputmode="decimal" min="0" max="24" step="any" value="${ex?ex.ot:''}" oninput="attCalc('${w.id}')"></label>
+  <label>Working hours<input id="hr_${w.id}" type="number" inputmode="decimal" min="0" max="24" step="any" value="${ex?ex.hours:''}" oninput="attCalc('${w.id}')"></label>
+  <label class="full">Remarks<input id="rm_${w.id}" value="${esc(ex?ex.remarks:'')}"></label></div></div>`}).join('');
+ $('grid').innerHTML=(dow===db.settings.weekOff?`<div class="warn">${dfmt(a.date)} is the configured weekly off day (${DAYNAMES[dow]}).</div>`:'')+
+ `<div class="tbar"><label>🔍 Search worker<input id="aq" type="search" placeholder="Name or ID" oninput="filterCards()"></label><label>Category<select id="acat" onchange="filterCards()">${opts(WCATS,'','All')}</select></label></div>
+ <div class="tbar"><div class="big2"><button class="btn g" onclick="attAll('P')">✔ Mark All Present</button><button class="btn r" onclick="attAll('A')">✖ Mark All Absent</button></div></div>
+ ${L.length?cards:'<div class="warn">No active workers are assigned to this site. Tick “Show all active workers” above, or assign workers to this site in Worker Master.</div>'}
+ <div class="sticky"><div class="cnt" id="acount"></div><button class="btn g" onclick="saveAttendance()">💾 Save</button></div>`;
+ L.forEach(w=>attPaint(w.id));attCount();
+}
+function filterCards(){const q=($('aq').value||'').toLowerCase().trim(),c=$('acat').value;document.querySelectorAll('.wc').forEach(el=>{el.style.display=((!q||el.dataset.name.includes(q))&&(!c||el.dataset.cat===c))?'':'none'})}
+function tapSt(id,k){if(k==='L'){setSt(id,isLv($('st_'+id).value)?'':'PL')}else setSt(id,k)}
+function setSt(id,st){if($('st_'+id).value===st)st='';$('st_'+id).value=st;attStatus(id)}
+function attPaint(id){
+ const st=$('st_'+id).value,c=$('wc_'+id);if(!c)return;c.setAttribute('data-st',st);
+ c.querySelectorAll('.sbtn button').forEach(b=>b.classList.toggle('on',b.dataset.k==='L'?isLv(st):b.dataset.k===st));
+ const lv=$('lv_'+id);lv.style.display=isLv(st)?'flex':'none';lv.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===st));
+}
+function attStatus(id){const w=W(id),st=$('st_'+id).value;$('hr_'+id).value=st==='P'?stdOf(w):st==='HD'?stdOf(w)/2:(st?0:'');if(st!=='P'&&st!=='HD')$('ot_'+id).value='';attPaint(id);attCalc(id);attCount()}
+function attCalc(id){const w=W(id),st=$('st_'+id).value;if(!st){$('wg_'+id).textContent='—';return}const ot=(st==='P'||st==='HD')?(+$('ot_'+id).value||0):0;$('wg_'+id).textContent=money(r2(rateOf(w)*dayVal(st))+r2(ot*otRateOf(w)))}
+function attAll(st){attWorkers().forEach(w=>{const c=$('wc_'+w.id);if(c&&c.style.display==='none')return;$('st_'+w.id).value=st;attStatus(w.id)});toast(st==='P'?'All marked Present – change individual workers if needed':'All marked Absent')}
+function attCount(){const c={P:0,HD:0,A:0,L:0,WO:0,U:0};attWorkers().forEach(w=>{const s=$('st_'+w.id);if(!s)return;const v=s.value;if(!v)c.U++;else if(v==='P')c.P++;else if(v==='HD')c.HD++;else if(v==='A')c.A++;else if(v==='WO')c.WO++;else c.L++});const e=$('acount');if(e)e.innerHTML=`<b>${c.P}</b> Present · <b>${c.HD}</b> Half · <b>${c.A}</b> Absent · <b>${c.L}</b> Leave · <b>${c.WO}</b> Off<br><span class="${c.U?'neg':'pos'}">${c.U} not marked</span>`}
+function saveAttendance(){
+ const {date,site}=F.att;if(!site||!date)return alert('Select date and site.');
+ const ent=[];
+ for(const w of attWorkers()){
+  const st=$('st_'+w.id).value;if(!st)continue;
+  const hours=+$('hr_'+w.id).value||0;let ot=+$('ot_'+w.id).value||0;if(st!=='P'&&st!=='HD')ot=0;
+  if(hours<0||hours>24||ot<0||ot>24)return alert('Hours must be between 0 and 24 ('+w.name+').');
+  ent.push({w,st,hours,ot,rm:$('rm_'+w.id).value.trim()});
+ }
+ if(!ent.length)return alert('No attendance marked.');
+ const cn={P:0,HD:0,A:0,L:0,WO:0};let tot=0,toth=0;ent.forEach(e=>{const k=e.st==='P'||e.st==='HD'||e.st==='A'||e.st==='WO'?e.st:'L';cn[k]++;toth+=e.ot;tot+=r2(rateOf(e.w)*dayVal(e.st))+r2(e.ot*otRateOf(e.w))});
+ const unm=attWorkers().length-ent.length;
+ if(!confirm('Save attendance?\n\nSite: '+sName(site)+'\nDate: '+dfmt(date)+'\n\nPresent: '+cn.P+'\nHalf Day: '+cn.HD+'\nAbsent: '+cn.A+'\nLeave/Holiday: '+cn.L+'\nWeek Off: '+cn.WO+'\nOvertime hours: '+toth+'\nEstimated wages: '+money(tot)+(unm?'\n\nNot marked (will be skipped): '+unm:'')))return;
+ let added=0,changed=0;const conf=[];
+ ent.forEach(e=>{
+  const ex=db.attendance.find(a=>a.workerId===e.w.id&&a.date===date&&a.siteId===site);
+  if(ex){if(ex.status!==e.st||ex.hours!==e.hours||ex.ot!==e.ot||ex.remarks!==e.rm){ex.history.push({ts:nowTs(),before:{status:ex.status,hours:ex.hours,ot:ex.ot,remarks:ex.remarks,wage:ex.wage,otAmt:ex.otAmt}});Object.assign(ex,{status:e.st,hours:e.hours,ot:e.ot,remarks:e.rm});recompute(ex);ex.edited=nowTs();audit('Attendance corrected',ex.id,e.w.name+' '+date);changed++}}
+  else{const a={id:nextId('ATT','ATT-',5),date,siteId:site,workerId:e.w.id,status:e.st,hours:e.hours,ot:e.ot,remarks:e.rm,rate:rateOf(e.w),otRate:otRateOf(e.w),history:[],created:nowTs()};recompute(a);db.attendance.push(a);added++}
+  if(db.attendance.some(a=>a.workerId===e.w.id&&a.date===date&&a.siteId!==site))conf.push(e.w.name);
+ });
+ save();toast(`✔ Attendance saved: ${added} new, ${changed} corrected`);
+ if(conf.length)alert('⚠ CONFLICT: these workers are also marked at another site on '+dfmt(date)+':\n'+conf.join(', ')+'\nOnly one day\'s wage will be counted. Review and void the wrong entry in the Attendance Log.');
+ pgAttendance();
+}
+function drawAttLog(){
+ const f=$('lf').value,t=$('lt').value,s=$('ls').value,w=$('lw').value;F.attLog={from:f,to:t};
+ const L=db.attendance.filter(a=>(!f||a.date>=f)&&(!t||a.date<=t)&&(!s||a.siteId===s)&&(!w||a.workerId===w)).sort((a,b)=>(b.date+b.workerId).localeCompare(a.date+a.workerId));
+ const cf=new Set(effAll().filter(a=>a.conflict).map(a=>a.id));
+ $('alog').innerHTML=tbl(['Date','Site','Worker','Status','#Hrs','#OT','#Wage','#OT Amt','Remarks','Flags','Actions'],L.slice(0,300).map(a=>`<tr><td>${dfmt(a.date)}</td><td>${esc(sName(a.siteId))}</td><td>${esc(wName(a.workerId))}</td><td>${a.status}</td><td class="n">${a.hours}</td><td class="n">${a.ot}</td><td class="n">${money(a.wage)}</td><td class="n">${money(a.otAmt)}</td><td>${esc(a.remarks)}</td>
+ <td>${cf.has(a.id)?'<span class="badge bad">CONFLICT</span> ':''}${a.history.length?`<span class="badge warn">edited ×${a.history.length}</span>`:''}${demoB(a)}</td>
+ <td><button class="btn s" onclick="F.att.date='${a.date}';F.att.site='${a.siteId}';pgAttendance();window.scrollTo(0,0)">Edit</button><button class="btn s r" onclick="voidAtt('${a.id}')">Void</button></td></tr>`).join(''))+(L.length>300?'<div class="sub">Showing first 300 records. Narrow the filter.</div>':'');
+}
+function voidAtt(id){
+ const a=db.attendance.find(x=>x.id===id);if(!a)return;
+ const reason=prompt('Void this attendance record ('+wName(a.workerId)+', '+dfmt(a.date)+', '+sName(a.siteId)+')?\nEnter a reason (required):');
+ if(!reason||!reason.trim())return;
+ audit('Attendance voided',id,JSON.stringify(a)+' | Reason: '+reason);
+ db.attendance=db.attendance.filter(x=>x.id!==id);save();toast('Record voided (kept in audit log)');pgAttendance();
+}
+
+/* =====================  WEEKLY SALARY & SETTLEMENT  ===================== */
+function pgSalary(){
+ if(!F.sal.date)F.sal.date=today();
+ const s=F.sal,ws=weekStartOf(s.date),we=addDays(ws,6);
+ $('main').innerHTML=head('Weekly Salary & Settlement','Preview, verify, approve, pay and print. Week: <b>'+dfmt(ws)+' to '+dfmt(we)+'</b>')+
+ `<div class="bar"><label>Any date in week<input type="date" value="${s.date}" onchange="F.sal.date=this.value||today();pgSalary()"></label>
+ <button class="btn o" onclick="F.sal.date=addDays('${ws}',-7);pgSalary()">◀ Prev</button><button class="btn o" onclick="F.sal.date=addDays('${ws}',7);pgSalary()">Next ▶</button>
+ <label>Site<select onchange="F.sal.site=this.value;pgSalary()">${siteOpts(s.site,'All sites')}</select></label>
+ <label>Worker<select onchange="F.sal.worker=this.value;pgSalary()">${workerOpts(s.worker,'All')}</select></label>
+ <label>Category<select onchange="F.sal.cat=this.value;pgSalary()">${opts(WCATS,s.cat,'All')}</select></label>
+ <button class="btn g" onclick="printRegister()">🖨 Print Weekly Salary Register</button></div>
+ <div class="sub">Salary is calculated per worker for the whole week (all sites). Site filter shows workers who worked at that site this week. Closing outstanding carries to next week automatically.</div><div id="res"></div>`;
+ const rows=weekWorkers(ws,s.site,s.cat,s.worker);
+ const k=(l,v,c)=>`<div><small>${l}</small><b class="${c||''}">${v}</b></div>`;
+ const ln=(l,v,b)=>`<tr${b?' class="tot"':''}><td>${l}</td><td class="n">${money(v)}</td></tr>`;
+ const sm=c=>`<div class="card ${c[2]||''}"><small>${c[0]}</small><b>${c[1]}</b></div>`;
+ $('res').innerHTML=`<div class="cards">${sm(['Net Salary Payable',money(sum(rows,'net')),'g'])}${sm(['Total Due (incl. previous)',money(sum(rows,'due'))])}${sm(['Total Paid',money(sum(rows,'paid')),'g'])}${sm(['Outstanding',money(sum(rows,'closing')),'r'])}</div>`+
+ (rows.length?rows.map(r=>`<div class="sc ${r.approved?'ap':''}"><div class="sch"><div><b>${esc(wName(r.wid))}</b>${demoB(W(r.wid))}<div class="sub" style="margin:0">${r.wid} · ${esc((W(r.wid)||{}).cat)}</div></div><div style="text-align:right">${r.approved?'<span class="badge ok">Approved</span>':'<span class="badge warn">Draft</span>'}${r.stale?'<br><span class="badge bad">changed after approval</span>':''}${r.conflicts?'<br><span class="badge bad">attendance conflict</span>':''}</div></div>
+ <div class="sg">${k('Attendance days',num(r.days))}${k('Basic wages',money(r.basic))}${k('Overtime',money(r.ot))}${k('Gross earnings',money(r.gross+r.adj))}${k('Advance recovery',money(r.advRec))}${k('Other deductions',money(r.loan+r.dmg+r.oth))}${k('Net salary',money(r.net),'nt')}${k('Amount paid',money(r.paid))}${k('Outstanding',money(r.closing),r.closing>0.004?'neg':'pos')}</div>
+ <details><summary>Show detailed calculation</summary><div class="tw"><table class="t keep"><tbody>${ln('Basic Wages ('+num(r.days)+' wage days)',r.basic)}${ln('Overtime ('+num(r.otH)+' hrs)',r.ot)}${ln('Incentives + Bonus',r.inc+r.bon)}${ln('Other Earnings',r.oe)}${r.adj?ln('Manual Adjustment',r.adj):''}${ln('Gross Earnings',r.gross+r.adj,1)}${ln('Advance Recovery',r.advRec)}${ln('Loan Recovery',r.loan)}${ln('Damage Recovery',r.dmg)}${ln('Other Deductions',r.oth)}${ln('Net Salary Payable',r.net,1)}${ln('Previous Outstanding',r.prev)}${ln('Total Amount Due',r.due,1)}${ln('Amount Paid',r.paid)}${ln('Closing Outstanding',r.closing,1)}</tbody></table></div></details>
+ <div class="sa"><button class="btn s" onclick="salDetail('${r.wid}','${ws}')">Open / Approve</button><button class="btn s g" onclick="payForm('${r.wid}','${ws}')">💰 Pay</button><button class="btn s o" onclick="printSlip('${r.wid}','${ws}')">🖨 Print Slip</button><button class="btn s o" onclick="downloadSlip('${r.wid}','${ws}')">⬇ Download</button></div></div>`).join(''):'<div class="warn">No salary records for this week and filter. Mark attendance first.</div>');
+}
+function salDetail(wid,ws){
+ const w=W(wid),r=weekRow(wid,ws),we=addDays(ws,6),inp=db.salaryInputs[ws+'|'+wid]||{},lock=r.approved?'disabled':'';
+ const days=[];for(let i=0;i<7;i++){const d=addDays(ws,i);const L=db.attendance.filter(a=>a.workerId===wid&&a.date===d);days.push(`<tr><td>${dfmt(d)} (${DAYNAMES[pd(d).getDay()].slice(0,3)})</td><td>${L.map(a=>esc(sName(a.siteId))).join(', ')||'—'}</td><td>${L.map(a=>a.status).join(', ')||'<span class="neg">Not marked</span>'}</td><td class="n">${sum(L,'hours')}</td><td class="n">${sum(L,'ot')}</td><td class="n">${money(sum(L,'wage')+sum(L,'otAmt'))}</td></tr>`)}
+ const dl=db.deductions.filter(d=>d.workerId===wid&&d.date>=ws&&d.date<=we);
+ const al=db.advances.filter(a=>a.workerId===wid&&a.date>=ws&&a.date<=we);
+ const pl=db.payments.filter(p=>p.workerId===wid&&p.week===ws);
+ const st=db.settlements[ws+'|'+wid];
+ const P=(l,v,b)=>`<tr${b?' class="tot"':''}><td>${l}</td><td class="n">${money(v)}</td></tr>`;
+ openModal(`Weekly Settlement – ${esc(w.name)} (${wid})`,`<div class="sub">Week ${dfmt(ws)} to ${dfmt(we)} · ${r.approved?'<span class="badge ok">APPROVED '+dfmt((st.approvedOn||'').slice(0,10))+'</span>':'<span class="badge warn">DRAFT (not approved)</span>'}${r.stale?' <span class="badge bad">Records changed after approval – reopen to recalculate</span>':''}</div>
+ <div class="two"><div><h3>Attendance (verify)</h3>${tbl(['Day','Site','Status','#Hrs','#OT','#Amount'],days.join(''))}
+ <h3>Deductions in this week (verify)</h3>${tbl(['Date','Category','Reason','Approval','#Amount'],dl.map(d=>`<tr><td>${dfmt(d.date)}</td><td>${esc(d.category)}</td><td>${esc(d.reason)}</td><td>${d.status}</td><td class="n">${money(d.amount)}</td></tr>`).join(''))}
+ <h3>Advances given this week (info – not salary)</h3>${tbl(['Date','Mode','#Amount'],al.map(a=>`<tr><td>${dfmt(a.date)}</td><td>${a.mode}</td><td class="n">${money(a.amount)}</td></tr>`).join(''))}<div class="sub">Advance balance now: <b>${money(advBal(wid))}</b>. Advances are recovered only through an Advance Recovery entry.</div></div>
+ <div><h3>Extra Earnings / Adjustment</h3><div class="fg"><label>Incentives<input id="si_inc" type="number" step="any" value="${inp.inc||''}" ${lock}></label><label>Bonus<input id="si_bonus" type="number" step="any" value="${inp.bonus||''}" ${lock}></label><label>Other Earnings<input id="si_other" type="number" step="any" value="${inp.other||''}" ${lock}></label><label>Manual Adjustment (+/−)<input id="si_adj" type="number" step="any" value="${inp.adj||''}" ${lock}></label><label class="full">Reason for adjustment (required if adjusting)<input id="si_reason" value="${esc(inp.adjReason||'')}" ${lock}></label></div>
+ ${r.approved?'':`<button class="btn s" onclick="saveSalInputs('${wid}','${ws}')">Save Extras</button>`}
+ <h3>Settlement</h3><div class="tw"><table class="t keep"><tbody>${P('Basic Wages ('+r.days+' days)',r.basic)}${P('Overtime ('+r.otH+' hrs)',r.ot)}${P('Incentives',r.inc)}${P('Bonus',r.bon)}${P('Other Earnings',r.oe)}${P('Gross Earnings',r.gross,1)}${r.adj?P('Manual Adjustment',r.adj):''}${P('Advance Recovery',r.advRec)}${P('Loan Recovery',r.loan)}${P('Damage Recovery',r.dmg)}${P('Other Deductions',r.oth)}${P('Net Salary Payable',r.net,1)}${P('Previous Outstanding',r.prev)}${P('Total Amount Due',r.due,1)}${P('Amount Paid',r.paid)}${P('Closing Outstanding',r.closing,1)}</tbody></table></div>
+ <div>${r.approved?`<button class="btn r" onclick="reopenWeek('${wid}','${ws}')">Reopen / Adjust</button>`:`<button class="btn g" onclick="approveWeek('${wid}','${ws}')">✔ Approve Settlement</button>`}<button class="btn" onclick="payForm('${wid}','${ws}')">💰 Record Payment</button><button class="btn o" onclick="printSlip('${wid}','${ws}')">🖨 Print Salary Slip</button></div>
+ <h3>Payments for this week</h3>${tbl(['Date','Mode','Ref','#Amount'],pl.map(p=>`<tr><td>${dfmt(p.date)}</td><td>${p.mode}</td><td>${esc(p.ref)}</td><td class="n">${money(p.amount)}</td></tr>`).join(''))}
+ ${st&&st.history&&st.history.length?`<h3>Adjustment History</h3>${tbl(['When','Event','Reason / Change'],st.history.map(h=>`<tr><td>${esc(h.ts.slice(0,16).replace('T',' '))}</td><td>${esc(h.type)}</td><td>${esc(h.note)}</td></tr>`).join(''))}`:''}</div></div>`,true);
+}
+function saveSalInputs(wid,ws){
+ const v=k=>$('si_'+k).value.trim();const o={inc:r2(v('inc')),bonus:r2(v('bonus')),other:r2(v('other')),adj:r2(v('adj')),adjReason:v('reason')};
+ if(o.adj!==0&&!o.adjReason)return alert('A reason is required for a manual adjustment.');
+ if(o.inc<0||o.bonus<0||o.other<0)return alert('Incentive, bonus and other earnings cannot be negative. Use Manual Adjustment for a correction.');
+ const k=ws+'|'+wid,old=db.salaryInputs[k]||{};
+ db.salaryInputs[k]=o;audit('Salary extras',k,'Before '+JSON.stringify(old)+' After '+JSON.stringify(o));save();toast('Saved');salDetail(wid,ws);pgSalary();
+}
+function approveWeek(wid,ws){
+ const live=calcWorkerWeek(wid,ws);
+ if(live.conflicts&&!confirm('This worker has conflicting attendance (marked at two sites on the same date). Only one day is counted. Approve anyway?'))return;
+ const we=addDays(ws,6);
+ if(db.deductions.some(d=>d.workerId===wid&&d.date>=ws&&d.date<=we&&d.status==='Pending')&&!confirm('There are PENDING deductions in this week. They are NOT included. Approve anyway?'))return;
+ if(live.net<0&&!confirm('Net salary is negative ('+money(live.net)+'). Approve anyway?'))return;
+ if(!confirm('Approve this weekly settlement? The calculation will be frozen. Later corrections need Reopen with a reason.'))return;
+ const key=ws+'|'+wid,old=db.settlements[key],h=old?old.history:[];
+ h.push({ts:nowTs(),type:'Approved',note:'Net '+money(live.net)});
+ db.settlements[key]={approved:true,approvedOn:nowTs(),snap:JSON.parse(JSON.stringify(live)),history:h,demo:!!(W(wid)||{}).demo};
+ audit('Settlement approved',key,'Net '+live.net);save();toast('Settlement approved');salDetail(wid,ws);pgSalary();
+}
+function reopenWeek(wid,ws){
+ const reason=prompt('Reopen this approved settlement to recalculate.\nEnter the reason (required):');if(!reason||!reason.trim())return;
+ const key=ws+'|'+wid,st=db.settlements[key];st.history.push({ts:nowTs(),type:'Reopened',note:reason+' (previous net '+money(st.snap.net)+')'});st.approved=false;
+ audit('Settlement reopened',key,reason);save();salDetail(wid,ws);pgSalary();
+}
+function printRegister(){
+ const s=F.sal,ws=weekStartOf(s.date),rows=weekWorkers(ws,s.site,s.cat,s.worker);
+ const sm=k=>money(sum(rows,k));
+ printHTML(compHead()+`<h3 style="text-align:center;margin:4px">WEEKLY SALARY REGISTER</h3><div style="text-align:center;font-size:12px;margin-bottom:8px">Week ${dfmt(ws)} to ${dfmt(addDays(ws,6))}${s.site?' · Site: '+esc(sName(s.site)):''}</div>
+ <table class="pt"><tr><th>ID</th><th>Worker</th><th>Days</th><th>Basic</th><th>OT</th><th>Extras</th><th>Gross</th><th>Adv.Rec</th><th>Other Ded</th><th>Net</th><th>Prev O/S</th><th>Paid</th><th>Closing</th><th>Sign</th></tr>
+ ${rows.map(r=>`<tr><td>${r.wid}</td><td>${esc(wName(r.wid))}</td><td class="n">${r.days}</td><td class="n">${num(r.basic)}</td><td class="n">${num(r.ot)}</td><td class="n">${num(r.inc+r.bon+r.oe+r.adj)}</td><td class="n">${num(r.gross+r.adj)}</td><td class="n">${num(r.advRec)}</td><td class="n">${num(r.loan+r.dmg+r.oth)}</td><td class="n">${num(r.net)}</td><td class="n">${num(r.prev)}</td><td class="n">${num(r.paid)}</td><td class="n">${num(r.closing)}</td><td></td></tr>`).join('')}
+ <tr><th colspan="3">TOTAL</th><th class="n">${num(sum(rows,'basic'))}</th><th class="n">${num(sum(rows,'ot'))}</th><th></th><th class="n">${num(r2(sum(rows,'gross')+sum(rows,'adj')))}</th><th class="n">${num(sum(rows,'advRec'))}</th><th class="n">${num(r2(sum(rows,'loan')+sum(rows,'dmg')+sum(rows,'oth')))}</th><th class="n">${num(sum(rows,'net'))}</th><th class="n">${num(sum(rows,'prev'))}</th><th class="n">${num(sum(rows,'paid'))}</th><th class="n">${num(sum(rows,'closing'))}</th><th></th></tr></table><div style="font-size:11px;margin-top:6px">Amounts in ${esc(db.settings.currency)}. Printed ${dfmt(today())}.</div>`);
+}
+function slipHTML(wid,ws){
+ const w=W(wid),r=weekRow(wid,ws),pl=db.payments.filter(p=>p.workerId===wid&&p.week===ws).sort((a,b)=>a.date.localeCompare(b.date));
+ const m=v=>money(v),sites=(r.sites.length?r.sites:[w.siteId]).map(sName).join(', ');
+ const row=(l,v)=>`<tr><td>${l}</td><td class="n">${m(v)}</td></tr>`;
+ return`<div class="slip"><h1>${esc(db.settings.company)}</h1><h4>WORKER WEEKLY SALARY STATEMENT</h4>
+ <table><tr><td><b>Worker ID:</b> ${w.id}</td><td><b>Worker Name:</b> ${esc(w.name)}</td></tr><tr><td><b>Mobile Number:</b> ${esc(w.mobile)}</td><td><b>Category:</b> ${esc(w.cat)}</td></tr><tr><td><b>Skill Level:</b> ${esc(w.skill)}</td><td><b>Construction Site:</b> ${esc(sites)}</td></tr><tr><td colspan="2"><b>Salary Week:</b> ${dfmt(ws)} to ${dfmt(addDays(ws,6))} ${r.approved?'':'(DRAFT – not yet approved)'}</td></tr></table>
+ <table><tr><th colspan="6">ATTENDANCE</th></tr><tr><td>Present Days: <b>${r.cnt.P}</b></td><td>Half Days: <b>${r.cnt.HD}</b></td><td>Paid Leave: <b>${r.cnt.PL}</b></td><td>Unpaid Leave: <b>${r.cnt.UL}</b></td><td>Weekly Off: <b>${r.cnt.WO}</b></td><td>Overtime Hrs: <b>${r.otH}</b></td></tr></table>
+ <table><tr><th colspan="2">EARNINGS</th></tr>${row('Basic Wages ('+r.days+' wage days)',r.basic)}${row('Overtime',r.ot)}${row('Incentives',r.inc+r.bon)}${row('Other Earnings'+(r.adj?' / Adjustment':''),r.oe+r.adj)}<tr><th>Gross Earnings</th><th class="n">${m(r.gross+r.adj)}</th></tr></table>
+ <table><tr><th colspan="2">DEDUCTIONS</th></tr>${row('Advance Recovery',r.advRec)}${row('Loan Recovery',r.loan)}${row('Damage / Other Deductions',r.dmg+r.oth)}<tr><th>Total Deductions</th><th class="n">${m(r.totalDed)}</th></tr></table>
+ <table><tr><th colspan="2">FINAL SETTLEMENT</th></tr>${row('Net Salary',r.net)}${row('Previous Outstanding',r.prev)}${row('Total Amount Due',r.due)}${row('Amount Paid',r.paid)}<tr><th>Closing Outstanding</th><th class="n">${m(r.closing)}</th></tr></table>
+ <table><tr><td><b>Payment Mode:</b> ${esc([...new Set(pl.map(p=>p.mode))].join(', '))}</td><td><b>Payment Date:</b> ${esc(pl.map(p=>dfmt(p.date)).join(', '))}</td></tr><tr><td colspan="2"><b>Transaction Reference:</b> ${esc(pl.map(p=>p.ref).filter(Boolean).join(', '))}</td></tr></table>
+ <div class="sig"><div>Worker Signature</div><div>Authorized Signature</div></div></div>`;
+}
+const printSlip=(wid,ws)=>printHTML(slipHTML(wid,ws));
+
+/* =====================  ADVANCES  ===================== */
+F.adv={from:'',to:'',worker:'',site:''};
+function pgAdvances(){
+ $('main').innerHTML=head('Advance Management','An advance is NOT salary. Balance = Advances given − Advance recoveries. Recoveries happen only when you enter them.')+
+ `<div class="bar"><button class="btn g" style="min-height:52px" onclick="advForm()">+ Give New Advance</button><button class="btn" style="min-height:52px" onclick="recForm()">↩ Advance Recovery</button></div>
+ <div class="cards"><div class="card a"><small>Total Advance Given</small><b>${money(sum(db.advances,'amount'))}</b></div><div class="card g"><small>Advance Recovered</small><b>${money(sum(db.deductions.filter(d=>d.category===DEDCATS[0]&&d.status==='Approved'),'amount'))}</b></div><div class="card r"><small>Remaining Advance</small><b>${money(db.workers.reduce((s,w)=>s+advBal(w.id),0))}</b></div></div>
+ <h3>Outstanding Advance by Worker</h3>${tbl(['Worker','#Total Given','#Total Recovered','#Balance',''],db.workers.filter(w=>advGiven(w.id)>0||advRecov(w.id)>0).map(w=>`<tr><td>${w.id} – ${esc(w.name)}${demoB(w)}</td><td class="n">${money(advGiven(w.id))}</td><td class="n">${money(advRecov(w.id))}</td><td class="n"><b>${money(advBal(w.id))}</b></td><td><button class="btn s o" onclick="advStatement('${w.id}')">Statement</button></td></tr>`).join(''))}
+ <h3>Advance History</h3><div class="bar"><label>From<input type="date" id="af" value="${F.adv.from}" onchange="drawAdv()"></label><label>To<input type="date" id="at" value="${F.adv.to}" onchange="drawAdv()"></label><label>Worker<select id="aw" onchange="drawAdv()">${workerOpts(F.adv.worker,'All')}</select></label><label>Site<select id="asi" onchange="drawAdv()">${siteOpts(F.adv.site,'All')}</select></label></div><div id="res"></div>`;
+ drawAdv();
+}
+function drawAdv(){
+ const f=$('af').value,t=$('at').value,w=$('aw').value,s=$('asi').value;F.adv={from:f,to:t,worker:w,site:s};
+ const L=db.advances.filter(a=>(!f||a.date>=f)&&(!t||a.date<=t)&&(!w||a.workerId===w)&&(!s||a.siteId===s)).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
+ $('res').innerHTML=tbl(['ID','Date','Worker','Site','#Amount','Mode','Reference','Purpose','Remarks',''],L.map(a=>`<tr><td>${a.id}</td><td>${dfmt(a.date)}</td><td>${esc(wName(a.workerId))}${demoB(a)}</td><td>${esc(sName(a.siteId))}</td><td class="n">${money(a.amount)}</td><td>${a.mode}</td><td>${esc(a.ref)}</td><td>${esc(a.purpose)}</td><td>${esc(a.remarks)}${a.history&&a.history.length?' <span class="badge warn">edited</span>':''}</td><td><button class="btn s" onclick="advForm('${a.id}')">Edit</button></td></tr>`).join(''));
+}
+function advForm(id){
+ const a=id?db.advances.find(x=>x.id===id):{date:today(),workerId:'',siteId:'',amount:'',mode:'Cash',ref:'',purpose:'',remarks:''};
+ openModal(id?'Edit Advance '+id:'Give New Advance',`<div class="fg"><label>Date<input id="av_date" type="date" value="${a.date}"></label><label>Worker *<select id="av_w">${workerOpts(a.workerId,'— Select —',1)}</select></label>
+ <label>Site<select id="av_s">${siteOpts(a.siteId,'— None —')}</select></label><label>Advance Amount *<input id="av_amt" type="number" min="0" step="any" value="${a.amount}"></label>
+ <label>Payment Mode<select id="av_mode">${opts(PAYPREF,a.mode)}</select></label><label>UPI / Bank Reference<input id="av_ref" value="${esc(a.ref)}"></label>
+ <label>Purpose<input id="av_pur" value="${esc(a.purpose)}"></label><label>Remarks<input id="av_rem" value="${esc(a.remarks)}"></label>${id?'<label class="full">Reason for change *<input id="av_why"></label>':''}</div>
+ <p><button class="btn g" onclick="saveAdv('${id||''}')">Save</button><button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+}
+function saveAdv(id){
+ const g=k=>$('av_'+k).value.trim(),amt=r2(g('amt'));
+ if(!g('w'))return alert('Select a worker.');if(!(amt>0))return alert('Enter an advance amount greater than zero.');
+ if((g('mode')!=='Cash')&&!g('ref'))return alert('Enter the UPI / Bank reference.');
+ if(db.advances.some(a=>a.id!==id&&a.workerId===g('w')&&a.date===g('date')&&a.amount===amt&&a.mode===g('mode')&&(a.ref||'')===g('ref')&&(a.purpose||'')===g('pur')))return alert('Duplicate: an identical advance already exists. Change the purpose/reference if this is a genuinely separate advance.');
+ const o={date:g('date'),workerId:g('w'),siteId:g('s'),amount:amt,mode:g('mode'),ref:g('ref'),purpose:g('pur'),remarks:g('rem')};
+ if(!confirm((id?'Save changes to advance of ':'Give advance of ')+money(amt)+' ('+g('mode')+') to '+wName(g('w'))+'?\n\nThis is an ADVANCE, not a salary payment.'))return;
+ if(id){const a=db.advances.find(x=>x.id===id);if(!g('why'))return alert('Enter the reason for the change.');
+  const nb=r2(advGiven(o.workerId)-(a.workerId===o.workerId?a.amount:0)+o.amount-advRecov(o.workerId));if(nb<-0.004)return alert('This change would make the advance balance negative.');
+  a.history=a.history||[];a.history.push({ts:nowTs(),reason:g('why'),before:{date:a.date,workerId:a.workerId,amount:a.amount,mode:a.mode,ref:a.ref}});Object.assign(a,o);audit('Advance edited',id,g('why'))}
+ else{o.id=nextId('ADV','ADV-',4);o.history=[];o.created=nowTs();db.advances.push(o);audit('Advance given',o.id,o.workerId+' '+amt)}
+ save();closeModal();toast('Advance saved');refresh();
+}
+function recForm(){
+ openModal('Advance Recovery',`<div class="fg"><label>Worker *<select id="rc_w" onchange="rcInfo()">${workerOpts('','— Select —',0)}</select></label><label>Recovery Date<input id="rc_date" type="date" value="${today()}"></label>
+ <label>Amount (partial or full) *<input id="rc_amt" type="number" min="0" step="any"></label><label>Site<select id="rc_s">${siteOpts('','— None —')}</select></label><label class="full">Remarks<input id="rc_rem"></label></div><div class="sub" id="rc_info">Select a worker to see the balance.</div>
+ <p><button class="btn g" onclick="saveRec()">Save Recovery</button><button class="btn" onclick="$('rc_amt').value=advBal($('rc_w').value)">Full Balance</button><button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+}
+function rcInfo(){const w=$('rc_w').value;$('rc_info').innerHTML=w?'Outstanding advance balance: <b>'+money(advBal(w))+'</b>':'Select a worker.'}
+function saveRec(){
+ const w=$('rc_w').value,amt=r2($('rc_amt').value),dt=$('rc_date').value;if(!w||!(amt>0))return alert('Select a worker and enter a valid amount.');
+ if(amt>advBal(w)+0.004)return alert('Recovery cannot exceed the outstanding advance balance ('+money(advBal(w))+').');
+ if(db.deductions.some(d=>d.workerId===w&&d.date===dt&&d.category===DEDCATS[0]&&d.amount===amt&&d.status!=='Rejected'))return alert('Duplicate: the same recovery already exists for this worker and date.');
+ if(!confirm('Record advance recovery of '+money(amt)+' from '+wName(w)+'?'))return;
+ const d={id:nextId('DED','DED-',4),date:dt,workerId:w,siteId:$('rc_s').value,category:DEDCATS[0],amount:amt,reason:'Advance recovery',status:'Approved',remarks:$('rc_rem').value.trim(),history:[],created:nowTs()};
+ db.deductions.push(d);audit('Advance recovery',d.id,w+' '+amt);save();closeModal();toast('Recovery recorded (counted in the salary week of '+dfmt(weekStartOf(dt))+')');refresh();
+}
+function advStatement(wid){
+ const ev=[];db.advances.filter(a=>a.workerId===wid).forEach(a=>ev.push({d:a.date,id:a.id,t:'Advance given',g:a.amount,r:0,n:a.purpose}));
+ db.deductions.filter(d=>d.workerId===wid&&d.category===DEDCATS[0]&&d.status==='Approved').forEach(d=>ev.push({d:d.date,id:d.id,t:'Recovery',g:0,r:d.amount,n:d.remarks}));
+ ev.sort((a,b)=>(a.d+a.id).localeCompare(b.d+b.id));let bal=0;
+ const rows=ev.map(e=>{bal=r2(bal+e.g-e.r);return`<tr><td>${dfmt(e.d)}</td><td>${e.id}</td><td>${e.t}</td><td>${esc(e.n)}</td><td class="n">${e.g?money(e.g):''}</td><td class="n">${e.r?money(e.r):''}</td><td class="n">${money(bal)}</td></tr>`}).join('');
+ openModal('Advance Statement – '+esc(wName(wid)),tbl(['Date','Ref','Type','Note','#Given','#Recovered','#Balance'],rows)+`<p><b>Closing Advance Balance: ${money(bal)}</b></p>`,true);
+}
+
+/* =====================  DEDUCTIONS  ===================== */
+F.ded={from:'',to:'',worker:'',site:'',cat:''};
+function pgDeductions(){
+ $('main').innerHTML=head('Deduction Management','Every deduction is explained and visible in the weekly salary. Only APPROVED deductions are applied. No statutory (PF/ESI/TDS) deductions are calculated.')+
+ `<div class="bar"><button class="btn g" onclick="dedForm()">+ Add Deduction</button><label>From<input type="date" id="df" value="${F.ded.from}" onchange="drawDed()"></label><label>To<input type="date" id="dt" value="${F.ded.to}" onchange="drawDed()"></label>
+ <label>Worker<select id="dw" onchange="drawDed()">${workerOpts(F.ded.worker,'All')}</select></label><label>Site<select id="dsite" onchange="drawDed()">${siteOpts(F.ded.site,'All')}</select></label><label>Category<select id="dc" onchange="drawDed()">${opts(DEDCATS,F.ded.cat,'All')}</select></label></div><div id="res"></div>`;drawDed();
+}
+function drawDed(){
+ const f=$('df').value,t=$('dt').value,w=$('dw').value,s=$('dsite').value,c=$('dc').value;F.ded={from:f,to:t,worker:w,site:s,cat:c};
+ const L=db.deductions.filter(d=>(!f||d.date>=f)&&(!t||d.date<=t)&&(!w||d.workerId===w)&&(!s||d.siteId===s)&&(!c||d.category===c)).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
+ $('res').innerHTML=tbl(['ID','Date','Worker','Site','Category','#Amount','Reason','Approval','Remarks',''],L.map(d=>`<tr><td>${d.id}</td><td>${dfmt(d.date)}</td><td>${esc(wName(d.workerId))}${demoB(d)}</td><td>${esc(sName(d.siteId))}</td><td>${esc(d.category)}</td><td class="n">${money(d.amount)}</td><td>${esc(d.reason)}</td><td><span class="badge ${d.status==='Approved'?'ok':d.status==='Pending'?'warn':'bad'}">${d.status}</span></td><td>${esc(d.remarks)}${d.history&&d.history.length?' <span class="badge warn">edited</span>':''}</td><td><button class="btn s" onclick="dedForm('${d.id}')">Edit</button></td></tr>`).join(''));
+}
+function dedForm(id){
+ const d=id?db.deductions.find(x=>x.id===id):{date:today(),workerId:'',siteId:'',category:DEDCATS[3],amount:'',reason:'',status:'Approved',remarks:''};
+ openModal(id?'Edit Deduction '+id:'Add Deduction',`<div class="fg"><label>Date<input id="dd_date" type="date" value="${d.date}"></label><label>Worker *<select id="dd_w">${workerOpts(d.workerId,'— Select —')}</select></label>
+ <label>Site<select id="dd_s">${siteOpts(d.siteId,'— None —')}</select></label><label>Category<select id="dd_c">${opts(DEDCATS,d.category)}</select></label>
+ <label>Amount *<input id="dd_amt" type="number" min="0" step="any" value="${d.amount}"></label><label>Approval Status<select id="dd_st">${opts(['Approved','Pending','Rejected'],d.status)}</select></label>
+ <label class="full">Reason * (shown in salary statement)<input id="dd_why" value="${esc(d.reason)}"></label><label class="full">Remarks<input id="dd_rem" value="${esc(d.remarks)}"></label>${id?'<label class="full">Reason for this change *<input id="dd_chg"></label>':''}</div>
+ <p><button class="btn g" onclick="saveDed('${id||''}')">Save</button><button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+}
+function saveDed(id){
+ const g=k=>$('dd_'+k).value.trim(),amt=r2(g('amt'));
+ if(!g('w'))return alert('Select a worker.');if(!(amt>0))return alert('Enter an amount greater than zero.');if(!g('why'))return alert('A reason is required – no unexplained deductions.');
+ const o={date:g('date'),workerId:g('w'),siteId:g('s'),category:g('c'),amount:amt,reason:g('why'),status:g('st'),remarks:g('rem')};
+ if(db.deductions.some(d=>d.id!==id&&d.workerId===o.workerId&&d.date===o.date&&d.category===o.category&&d.amount===amt&&d.reason===o.reason&&d.status!=='Rejected'))return alert('Duplicate deduction: an identical entry already exists.');
+ if(o.category===DEDCATS[0]&&o.status==='Approved'){const bal=r2(advGiven(o.workerId)-advRecov(o.workerId,null,null,id));if(amt>bal+0.004)return alert('Advance recovery cannot exceed the outstanding advance balance ('+money(bal)+').')}
+ if(!confirm((id?'Save changes to deduction of ':'Add deduction of ')+money(amt)+' for '+wName(o.workerId)+' ('+o.category+')?'))return;
+ if(id){const d=db.deductions.find(x=>x.id===id);if(!g('chg'))return alert('Enter the reason for the change.');d.history=d.history||[];d.history.push({ts:nowTs(),reason:g('chg'),before:{date:d.date,workerId:d.workerId,category:d.category,amount:d.amount,status:d.status,reason:d.reason}});Object.assign(d,o);audit('Deduction edited',id,g('chg'))}
+ else{o.id=nextId('DED','DED-',4);o.history=[];o.created=nowTs();db.deductions.push(o);audit('Deduction added',o.id,o.workerId+' '+amt)}
+ save();closeModal();toast('Deduction saved');refresh();
+}
+
+/* =====================  PAYMENTS  ===================== */
+F.pay={from:'',to:'',worker:'',site:'',mode:''};
+function pgPayments(){
+ $('main').innerHTML=head('Payment Transactions','Every actual payment to a worker. Salary payable and salary paid are kept separate; advances are never counted here.')+
+ payCards()+`<div class="bar"><button class="btn g" style="flex:1 1 100%;min-height:52px;font-size:16px" onclick="payForm()">+ Record Payment</button><label>From<input type="date" id="pf" value="${F.pay.from}" onchange="drawPay()"></label><label>To<input type="date" id="pt" value="${F.pay.to}" onchange="drawPay()"></label>
+ <label>Worker<select id="pw" onchange="drawPay()">${workerOpts(F.pay.worker,'All')}</select></label><label>Site<select id="ps" onchange="drawPay()">${siteOpts(F.pay.site,'All')}</select></label><label>Mode<select id="pm" onchange="drawPay()">${opts(PAYPREF,F.pay.mode,'All')}</select></label></div><div id="res"></div>`;drawPay();
+}
+function drawPay(){
+ const f=$('pf').value,t=$('pt').value,w=$('pw').value,s=$('ps').value,m=$('pm').value;F.pay={from:f,to:t,worker:w,site:s,mode:m};
+ const L=db.payments.filter(p=>(!f||p.date>=f)&&(!t||p.date<=t)&&(!w||p.workerId===w)&&(!s||p.siteId===s)&&(!m||p.mode===m)).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
+ $('res').innerHTML=tbl(['ID','Date','Worker','Salary Week','Site','#Amount','Mode','Reference','Remarks',''],L.map(p=>`<tr><td>${p.id}</td><td>${dfmt(p.date)}</td><td>${esc(wName(p.workerId))}${demoB(p)}</td><td>${dfmt(p.week)}</td><td>${esc(sName(p.siteId))}</td><td class="n">${money(p.amount)}</td><td>${p.mode}</td><td>${esc(p.ref)}</td><td>${esc(p.remarks)}${p.history&&p.history.length?` <span class="badge warn">edited ×${p.history.length}</span>`:''}</td><td><button class="btn s" onclick="payForm('','','${p.id}')">Edit</button><button class="btn s o" onclick="payReceipt('${p.id}')">Receipt</button></td></tr>`).join('')+(L.length?`<tr class="tot"><td colspan="5">TOTAL</td><td class="n">${money(sum(L,'amount'))}</td><td colspan="4"></td></tr>`:''));
+}
+function payForm(wid,ws,id){
+ const p=id?db.payments.find(x=>x.id===id):null;
+ if(p){wid=p.workerId;ws=p.week}
+ ws=ws||weekStartOf(today());
+ const defSite=(()=>{const L=db.attendance.filter(a=>a.workerId===wid&&a.date>=ws&&a.date<=addDays(ws,6));return L.length?L[0].siteId:((W(wid)||{}).siteId||'')})();
+ const o=p||{date:today(),workerId:wid||'',week:ws,siteId:defSite,amount:'',mode:(W(wid)||{}).pay||'Cash',ref:'',remarks:''};
+ openModal(id?'Edit Payment '+id:'Record Salary Payment',`<div class="fg"><label>Worker *<select id="py_w" onchange="payInfo()" ${id?'disabled':''}>${workerOpts(o.workerId,'— Select —')}</select></label><label>Related Salary Week (any date in week) *<input id="py_wk" type="date" value="${o.week}" onchange="payInfo()" ${id?'disabled':''}></label>
+ <label>Payment Date<input id="py_date" type="date" value="${o.date}"></label><label>Payment Amount *<input id="py_amt" type="number" min="0" step="any" value="${o.amount}"></label>
+ <label>Payment Mode<select id="py_mode">${opts(PAYPREF,o.mode)}</select></label><label>Transaction Reference (UPI / Bank)<input id="py_ref" value="${esc(o.ref)}"></label>
+ <label>Site<select id="py_s">${siteOpts(o.siteId,'— None —')}</select></label><label>Remarks<input id="py_rem" value="${esc(o.remarks)}"></label>${id?'<label class="full">Reason for correction *<input id="py_why"></label>':''}</div>
+ <div class="sub" id="py_info"></div><p><button class="btn g" onclick="savePay('${id||''}')">Save Payment</button>${id?'':`<button class="btn" onclick="payFull()">Fill Full Amount Due</button>`}<button class="btn o" onclick="closeModal()">Cancel</button></p>`);
+ payInfo();
+}
+function payInfo(){const w=$('py_w').value,wk=$('py_wk').value;if(!w||!wk){$('py_info').textContent='';return}const r=weekRow(w,weekStartOf(wk));$('py_info').innerHTML=`<div class="cards"><div class="card"><small>Total Salary Payable (incl. previous)</small><b>${money(r.due)}</b></div><div class="card g"><small>Total Paid so far</small><b>${money(r.paid)}</b></div><div class="card ${r.closing>0.004?'r':'g'}" style="grid-column:1/-1"><small>Remaining Outstanding</small><b>${money(r.closing)}</b></div></div><div class="sub">Week ${dfmt(weekStartOf(wk))} · Net this week ${money(r.net)} · Previous outstanding ${money(r.prev)}. Advances are NOT counted as salary paid.</div>`}
+function payFull(){const w=$('py_w').value,wk=$('py_wk').value;if(!w||!wk)return;$('py_amt').value=Math.max(0,weekRow(w,weekStartOf(wk)).closing)}
+function savePay(id){
+ const g=k=>$('py_'+k).value.trim(),amt=r2(g('amt')),w=g('w'),ws=weekStartOf(g('wk'));
+ if(!w||!g('wk'))return alert('Select worker and salary week.');if(!(amt>0))return alert('Enter a payment amount greater than zero.');
+ if(g('mode')!=='Cash'&&!g('ref'))return alert('Enter the transaction reference for UPI / Bank payments.');
+ if(db.payments.some(p=>p.id!==id&&p.workerId===w&&p.week===ws&&p.date===g('date')&&p.amount===amt&&p.mode===g('mode')&&(p.ref||'')===g('ref')&&(p.remarks||'')===g('rem')))return alert('Duplicate transaction blocked: an identical payment already exists. If this is really a second payment, change the remarks.');
+ if(g('ref')&&db.payments.some(p=>p.id!==id&&p.mode!=='Cash'&&p.ref===g('ref')&&p.mode===g('mode')))return alert('This transaction reference has already been recorded for another payment.');
+ const r=weekRow(w,ws),already=id?db.payments.find(x=>x.id===id).amount:0,bal=r2(r.closing+already);
+ if(amt>bal+0.004&&!confirm('Payment ('+money(amt)+') is MORE than the amount due ('+money(bal)+'). The closing balance will become negative (overpaid). Continue?'))return;
+ if(!confirm((id?'Save correction – payment of ':'Record payment of ')+money(amt)+' via '+g('mode')+' to '+wName(w)+'?\nSalary week: '+dfmt(ws)))return;
+ const o={date:g('date'),workerId:w,week:ws,siteId:g('s'),amount:amt,mode:g('mode'),ref:g('ref'),remarks:g('rem')};
+ if(id){const p=db.payments.find(x=>x.id===id);if(!g('why'))return alert('Enter the reason for the correction.');p.history=p.history||[];p.history.push({ts:nowTs(),reason:g('why'),before:{date:p.date,amount:p.amount,mode:p.mode,ref:p.ref,siteId:p.siteId,remarks:p.remarks}});Object.assign(p,o);audit('Payment corrected',id,g('why'))}
+ else{o.id=nextId('PAY','PAY-',4);o.history=[];o.created=nowTs();db.payments.push(o);audit('Payment recorded',o.id,w+' '+amt+' '+o.mode)}
+ save();closeModal();toast('Payment saved');refresh();
+}
+function payReceipt(id){
+ const p=db.payments.find(x=>x.id===id),w=W(p.workerId),r=weekRow(p.workerId,p.week);
+ printHTML(`<div class="slip">${compHead()}<h4>SALARY PAYMENT RECEIPT</h4><table><tr><td><b>Receipt / Txn ID:</b> ${p.id}</td><td><b>Payment Date:</b> ${dfmt(p.date)}</td></tr><tr><td><b>Worker:</b> ${esc(w.name)} (${w.id})</td><td><b>Mobile:</b> ${esc(w.mobile)}</td></tr><tr><td><b>Salary Week:</b> ${dfmt(p.week)} to ${dfmt(addDays(p.week,6))}</td><td><b>Site:</b> ${esc(sName(p.siteId))}</td></tr><tr><td><b>Mode:</b> ${p.mode}</td><td><b>Reference:</b> ${esc(p.ref)}</td></tr>
+ <tr><td colspan="2" style="font-size:16px"><b>Amount Paid: ${money(p.amount)}</b></td></tr><tr><td><b>Total due for the week:</b> ${money(r.due)}</td><td><b>Balance outstanding after all payments:</b> ${money(r.closing)}</td></tr><tr><td colspan="2"><b>Remarks:</b> ${esc(p.remarks)}</td></tr></table><div class="sig"><div>Worker Signature</div><div>Authorized Signature</div></div></div>`);
+}
+
+/* =====================  REPORTS  ===================== */
+const REPORTS=[['daily','1. Daily Attendance Register'],['weekly','2. Weekly Attendance Register'],['siteatt','3. Site-wise Attendance Report'],['workatt','4. Worker-wise Attendance History'],['salreg','5. Weekly Salary Register'],['salstat','6. Individual Worker Salary Statement'],['sitecost','7. Site-wise Labour Cost Report'],['advreg','8. Advance Register'],['advout','9. Advance Outstanding Report'],['dedreg','10. Deduction Register'],['payreg','11. Payment Transaction Register'],['sitepay','12. Site-wise Payment Summary'],['outsal','13. Worker-wise Outstanding Salary'],['cash','14. Weekly Cash Payment Summary'],['upi','15. Weekly UPI Payment Summary'],['bank','16. Weekly Bank Payment Summary']];
+let lastRep=null;
+function pgReports(){
+ const r=F.rep;if(!r.from){r.from=weekStartOf(today());r.to=addDays(r.from,6)}
+ $('main').innerHTML=head('Reports','Choose a report, set filters, then View, Print or export CSV.')+
+ `<div class="bar"><label>Report<select id="rp_t">${opts(REPORTS,r.type)}</select></label><label>From<input type="date" id="rp_f" value="${r.from}"></label><label>To<input type="date" id="rp_to" value="${r.to}"></label>
+ <label>Site<select id="rp_s">${siteOpts(r.site,'All')}</select></label><label>Worker<select id="rp_w">${workerOpts(r.worker,'All')}</select></label><label>Category<select id="rp_c">${opts(WCATS,r.cat,'All')}</select></label>
+ <button class="btn g" onclick="runReport()">View Report</button><button class="btn" onclick="printReport()">🖨 Print</button><button class="btn o" onclick="csvReport()">⬇ CSV</button></div><div id="res"></div>`;
+ runReport();
+}
+const okW=(wid,f)=>{const w=W(wid);return(!f.worker||f.worker===wid)&&(!f.cat||(w&&w.cat===f.cat))};
+function buildReport(f){
+ const inR=d=>d>=f.from&&d<=f.to,siteOk=s=>!f.site||s===f.site,T=f.type;
+ const effR=()=>effAll().filter(a=>inR(a.date)&&siteOk(a.siteId)&&okW(a.workerId,f));
+ const att7=['P','HD','PL','UL','A','WO','H'];
+ const cntCols=att7.map(k=>({k:'c'+k,l:k,t:'n'}));
+ const countRow=L=>{const o={};att7.forEach(k=>o['c'+k]=L.filter(a=>a.status===k).length);o.days=sum(L,'cDays');o.wage=sum(L,'cWage');o.ot=sum(L,'cOT');o.oth=sum(L,'cOTh');o.total=r2(o.wage+o.ot);return o};
+ const aggCols=[...cntCols,{k:'days',l:'Wage Days',t:'n'},{k:'oth',l:'OT Hrs',t:'n'},{k:'wage',l:'Basic Wages',t:'m'},{k:'ot',l:'Overtime',t:'m'},{k:'total',l:'Total',t:'m'}];
+ let title=(REPORTS.find(x=>x[0]===T)||['',''])[1].replace(/^\d+\.\s*/,''),cols=[],rows=[],note='';
+ if(T==='daily'){cols=[{k:'date',l:'Date',t:'d'},{k:'site',l:'Site'},{k:'id',l:'Worker ID'},{k:'name',l:'Worker'},{k:'cat',l:'Category'},{k:'st',l:'Status'},{k:'hrs',l:'Hours',t:'n'},{k:'ot',l:'OT Hrs',t:'n'},{k:'wage',l:'Wage',t:'m'},{k:'otAmt',l:'OT Amount',t:'m'},{k:'rem',l:'Remarks'},{k:'flag',l:'Flag'}];
+  const cf=new Set(effAll().filter(a=>a.conflict).map(a=>a.id));
+  rows=db.attendance.filter(a=>inR(a.date)&&siteOk(a.siteId)&&okW(a.workerId,f)).sort((a,b)=>(a.date+a.siteId+a.workerId).localeCompare(b.date+b.siteId+b.workerId)).map(a=>({date:a.date,site:sName(a.siteId),id:a.workerId,name:wName(a.workerId),cat:(W(a.workerId)||{}).cat,st:a.status,hrs:a.hours,ot:a.ot,wage:a.wage,otAmt:a.otAmt,rem:a.remarks,flag:cf.has(a.id)?'CONFLICT':''}))}
+ else if(T==='weekly'){const ds=[];for(let d=f.from;d<=f.to&&ds.length<31;d=addDays(d,1))ds.push(d);
+  cols=[{k:'id',l:'Worker ID'},{k:'name',l:'Worker'}].concat(ds.map(d=>({k:'d'+d,l:dfmt(d).slice(0,5)}))).concat([{k:'days',l:'Wage Days',t:'n'}]);
+  const E=effR();db.workers.forEach(w=>{if(!okW(w.id,f))return;const L=E.filter(a=>a.workerId===w.id);if(!L.length)return;const o={id:w.id,name:w.name,days:sum(L,'cDays')};ds.forEach(d=>{const x=L.filter(a=>a.date===d);o['d'+d]=x.map(a=>a.status).join('/')});rows.push(o)});if(ds.length>=31)note='Showing first 31 days of the range.'}
+ else if(T==='siteatt'||T==='sitecost'){cols=[{k:'site',l:'Site'},{k:'workers',l:'Workers',t:'n'}].concat(T==='siteatt'?aggCols:[{k:'days',l:'Wage Days',t:'n'},{k:'oth',l:'OT Hrs',t:'n'},{k:'wage',l:'Basic Wages',t:'m'},{k:'ot',l:'Overtime',t:'m'},{k:'total',l:'Total Labour Cost',t:'m'}]);
+  const E=effR();db.sites.forEach(s=>{if(!siteOk(s.id))return;const L=E.filter(a=>a.siteId===s.id);if(!L.length)return;rows.push(Object.assign({site:s.name,workers:new Set(L.map(a=>a.workerId)).size},countRow(L)))})}
+ else if(T==='workatt'){cols=[{k:'id',l:'Worker ID'},{k:'name',l:'Worker'},{k:'cat',l:'Category'}].concat(aggCols);const E=effR();db.workers.forEach(w=>{const L=E.filter(a=>a.workerId===w.id);if(!L.length)return;rows.push(Object.assign({id:w.id,name:w.name,cat:w.cat},countRow(L)))})}
+ else if(T==='salreg'||T==='salstat'){
+  if(T==='salstat'&&!f.worker)note='Select a Worker to see an individual statement.';
+  cols=[{k:'week',l:'Week',t:'d'},{k:'id',l:'Worker ID'},{k:'name',l:'Worker'},{k:'days',l:'Wage Days',t:'n'},{k:'basic',l:'Basic',t:'m'},{k:'ot',l:'Overtime',t:'m'},{k:'inc',l:'Incentive+Bonus',t:'m'},{k:'oe',l:'Other/Adj',t:'m'},{k:'gross',l:'Gross',t:'m'},{k:'advRec',l:'Advance Rec.',t:'m'},{k:'oth',l:'Other Ded.',t:'m'},{k:'net',l:'Net Payable',t:'m'},{k:'prev',l:'Prev O/S',t:'m'},{k:'paid',l:'Paid',t:'m'},{k:'closing',l:'Closing O/S',t:'m'},{k:'status',l:'Status'}];
+  if(!(T==='salstat'&&!f.worker))for(let w=weekStartOf(f.from);w<=f.to;w=addDays(w,7))weekWorkers(w,f.site,f.cat,f.worker).forEach(r=>rows.push({week:w,id:r.wid,name:wName(r.wid),days:r.days,basic:r.basic,ot:r.ot,inc:r2(r.inc+r.bon),oe:r2(r.oe+r.adj),gross:r2(r.gross+r.adj),advRec:r.advRec,oth:r2(r.loan+r.dmg+r.oth),net:r.net,prev:r.prev,paid:r.paid,closing:r.closing,status:r.approved?'Approved':'Draft'}))}
+ else if(T==='advreg'){cols=[{k:'id',l:'Txn ID'},{k:'date',l:'Date',t:'d'},{k:'wid',l:'Worker ID'},{k:'name',l:'Worker'},{k:'site',l:'Site'},{k:'amt',l:'Amount',t:'m'},{k:'mode',l:'Mode'},{k:'ref',l:'Reference'},{k:'pur',l:'Purpose'},{k:'rem',l:'Remarks'}];
+  rows=db.advances.filter(a=>inR(a.date)&&siteOk(a.siteId)&&okW(a.workerId,f)).sort((a,b)=>a.date.localeCompare(b.date)).map(a=>({id:a.id,date:a.date,wid:a.workerId,name:wName(a.workerId),site:sName(a.siteId),amt:a.amount,mode:a.mode,ref:a.ref,pur:a.purpose,rem:a.remarks}))}
+ else if(T==='advout'){cols=[{k:'id',l:'Worker ID'},{k:'name',l:'Worker'},{k:'open',l:'Opening Balance',t:'m'},{k:'given',l:'New Advances',t:'m'},{k:'rec',l:'Recoveries',t:'m'},{k:'close',l:'Closing Balance',t:'m'}];
+  db.workers.forEach(w=>{if(!okW(w.id,f))return;const open=r2(advGiven(w.id,addDays(f.from,-1))-advRecov(w.id,addDays(f.from,-1))),g=advGiven(w.id,f.to,f.from),rc=advRecov(w.id,f.to,f.from),c=r2(open+g-rc);if(Math.abs(open)+g+rc+Math.abs(c)>0.004)rows.push({id:w.id,name:w.name,open,given:g,rec:rc,close:c})})}
+ else if(T==='dedreg'){cols=[{k:'id',l:'ID'},{k:'date',l:'Date',t:'d'},{k:'wid',l:'Worker ID'},{k:'name',l:'Worker'},{k:'site',l:'Site'},{k:'cat',l:'Category'},{k:'amt',l:'Amount',t:'m'},{k:'why',l:'Reason'},{k:'st',l:'Approval'},{k:'rem',l:'Remarks'}];
+  rows=db.deductions.filter(d=>inR(d.date)&&siteOk(d.siteId)&&okW(d.workerId,f)).sort((a,b)=>a.date.localeCompare(b.date)).map(d=>({id:d.id,date:d.date,wid:d.workerId,name:wName(d.workerId),site:sName(d.siteId),cat:d.category,amt:d.amount,why:d.reason,st:d.status,rem:d.remarks}))}
+ else if(T==='payreg'||T==='cash'||T==='upi'||T==='bank'){
+  const mode={cash:'Cash',upi:'UPI',bank:'Bank Transfer'}[T];
+  cols=[{k:'id',l:'Txn ID'},{k:'date',l:'Payment Date',t:'d'},{k:'week',l:'Salary Week',t:'d'},{k:'wid',l:'Worker ID'},{k:'name',l:'Worker'},{k:'site',l:'Site'},{k:'amt',l:'Amount',t:'m'},{k:'mode',l:'Mode'},{k:'ref',l:'Reference'},{k:'rem',l:'Remarks'}];
+  rows=db.payments.filter(p=>inR(p.date)&&siteOk(p.siteId)&&okW(p.workerId,f)&&(!mode||p.mode===mode)).sort((a,b)=>(T==='payreg'?a.date+a.id:a.week+a.date+a.id).localeCompare(T==='payreg'?b.date+b.id:b.week+b.date+b.id)).map(p=>({id:p.id,date:p.date,week:p.week,wid:p.workerId,name:wName(p.workerId),site:sName(p.siteId),amt:p.amount,mode:p.mode,ref:p.ref,rem:p.remarks}))}
+ else if(T==='sitepay'){cols=[{k:'site',l:'Site'},{k:'cash',l:'Cash',t:'m'},{k:'upi',l:'UPI',t:'m'},{k:'bank',l:'Bank Transfer',t:'m'},{k:'total',l:'Total',t:'m'}];
+  const P=db.payments.filter(p=>inR(p.date)&&okW(p.workerId,f));const ids=[...db.sites.map(s=>s.id),''];
+  ids.forEach(id=>{if(f.site&&id!==f.site)return;const L=P.filter(p=>(p.siteId||'')===id);if(!L.length)return;const m=x=>sum(L.filter(p=>p.mode===x),'amount');rows.push({site:id?sName(id):'(No site)',cash:m('Cash'),upi:m('UPI'),bank:m('Bank Transfer'),total:sum(L,'amount')})})}
+ else if(T==='outsal'){const ws=weekStartOf(f.to);note='Position as at salary week '+dfmt(ws)+' to '+dfmt(addDays(ws,6))+'.';
+  cols=[{k:'id',l:'Worker ID'},{k:'name',l:'Worker'},{k:'cat',l:'Category'},{k:'prev',l:'Opening O/S',t:'m'},{k:'net',l:'Net Payable',t:'m'},{k:'paid',l:'Paid',t:'m'},{k:'closing',l:'Closing O/S',t:'m'}];
+  db.workers.forEach(w=>{if(!okW(w.id,f))return;const r=weekRow(w.id,ws);if(Math.abs(r.closing)>0.004||Math.abs(r.net)>0.004)rows.push({id:w.id,name:w.name,cat:w.cat,prev:r.prev,net:r.net,paid:r.paid,closing:r.closing})})}
+ return{title,cols,rows,note,period:'Period: '+dfmt(f.from)+' to '+dfmt(f.to)+(f.site?' · Site: '+sName(f.site):'')+(f.worker?' · Worker: '+wName(f.worker):'')+(f.cat?' · Category: '+f.cat:'')};
+}
+function runReport(){
+ const r=F.rep;r.type=$('rp_t').value;r.from=$('rp_f').value;r.to=$('rp_to').value;r.site=$('rp_s').value;r.worker=$('rp_w').value;r.cat=$('rp_c').value;
+ if(!r.from||!r.to||r.to<r.from){$('res').innerHTML='<div class="warn">Choose a valid date range.</div>';return}
+ lastRep=buildReport(r);$('res').innerHTML=repHTML(lastRep,false);
+}
+function repHTML(rep,print){
+ const fmt=(c,v)=>c.t==='m'?(print?num(v):money(v)):c.t==='d'?dfmt(v):c.t==='n'?num(v):esc(v);
+ const tot=rep.rows.length&&rep.cols.some(c=>c.t==='m'||c.t==='n')?`<tr class="tot">${rep.cols.map((c,i)=>(c.t==='m'||c.t==='n')?`<td class="n">${fmt(c,sum(rep.rows,c.k))}</td>`:`<td>${i===0?'TOTAL':''}</td>`).join('')}</tr>`:'';
+ const body=rep.rows.map(r=>`<tr>${rep.cols.map(c=>`<td${(c.t==='m'||c.t==='n')?' class="n"':''}>${fmt(c,r[c.k])}</td>`).join('')}</tr>`).join('');
+ const head=`<tr>${rep.cols.map(c=>`<th${(c.t==='m'||c.t==='n')?' class="n"':''}>${esc(c.l)}</th>`).join('')}</tr>`;
+ if(print)return compHead()+`<h3 style="text-align:center;margin:4px">${esc(rep.title.toUpperCase())}</h3><div style="text-align:center;font-size:12px;margin-bottom:8px">${esc(rep.period)}</div><table class="pt">${head}${body}${tot}</table><div style="font-size:11px;margin-top:6px">${esc(rep.note)} Printed ${dfmt(today())}.</div>`;
+ const sc=rep.cols.filter(c=>c.t==='m').slice(0,4).map(c=>`<div class="card g"><small>${esc(c.l)}</small><b>${money(sum(rep.rows,c.k))}</b></div>`).join('');
+ return`<div class="cards"><div class="card"><small>Rows</small><b>${rep.rows.length}</b></div>${sc}</div><div class="sub"><b>${esc(rep.title)}</b> · ${esc(rep.period)} · ${rep.rows.length} row(s) ${rep.note?'· '+esc(rep.note):''}</div><div class="tw"><table class="t"><thead>${head}</thead><tbody>${body||`<tr><td colspan="${rep.cols.length}" style="text-align:center;padding:18px;color:#7a8794">No records found.</td></tr>`}${tot}</tbody></table></div>`;
+}
+function printReport(){runReport();if(lastRep)printHTML(repHTML(lastRep,true))}
+function csvReport(){runReport();if(!lastRep)return;downloadFile((lastRep.title.replace(/\W+/g,'_')).toLowerCase()+'.csv',toCSV(lastRep.cols.map(c=>c.l),lastRep.rows.map(r=>lastRep.cols.map(c=>r[c.k]))),'text/csv')}
+
+/* =====================  SETTINGS  ===================== */
+function pgSettings(){
+ const s=db.settings;
+ $('main').innerHTML=head('Settings','Defaults used when a worker has no own rate. Individual worker rates always override these.')+
+ `<div class="fg"><label>Company Name<input id="se_company" value="${esc(s.company)}"></label><label>Currency Symbol<input id="se_currency" value="${esc(s.currency)}" maxlength="4"></label>
+ <label>Week Starting Day<select id="se_weekStart">${opts(DAYNAMES.map((d,i)=>[i,d]),s.weekStart)}</select></label><label>Weekly Off Day<select id="se_weekOff">${opts(DAYNAMES.map((d,i)=>[i,d]),s.weekOff)}</select></label>
+ <label>Standard Working Hours<input id="se_stdHours" type="number" min="1" step="any" value="${s.stdHours}"></label><label>Default Daily Wage<input id="se_defWage" type="number" min="0" step="any" value="${s.defWage}"></label>
+ <label>Default Overtime Rate / Hour<input id="se_defOT" type="number" min="0" step="any" value="${s.defOT}"></label><label>Paid Weekly Off<select id="se_paidWO">${opts([['1','Yes'],['0','No']],s.paidWO?'1':'0')}</select></label><label>Paid Holiday<select id="se_paidH">${opts([['1','Yes'],['0','No']],s.paidH?'1':'0')}</select></label></div>
+ <h3>Attendance Rules (wage days per status)</h3><div class="fg">${['P','HD','PL','UL','A'].map(k=>`<label>${k} – ${STATUSES[k]}<input id="se_r${k}" type="number" min="0" max="1" step="0.25" value="${s.rules[k]}"></label>`).join('')}</div>
+ <p class="sub">Weekly Off and Holiday follow the Paid Yes/No settings above. Changed rules apply to attendance saved from now on; approved settlements stay frozen.</p><button class="btn g" onclick="saveSettings()">Save Settings</button>`;
+}
+function saveSettings(){
+ const v=k=>$('se_'+k).value.trim(),n=k=>+v(k);
+ if(!v('company'))return alert('Company name is required.');
+ for(const k of['stdHours','defWage','defOT'])if(isNaN(n(k))||n(k)<0)return alert('Enter valid numbers.');
+ const ns=+v('weekStart');
+ if(ns!==db.settings.weekStart&&(db.attendance.length||db.payments.length)&&!confirm('Changing the week starting day changes how existing records are grouped into weeks. Approved settlements and payments keep their old week dates. Continue?'))return;
+ Object.assign(db.settings,{company:v('company'),currency:v('currency')||'₹',weekStart:ns,weekOff:+v('weekOff'),stdHours:n('stdHours'),defWage:n('defWage'),defOT:n('defOT'),paidWO:v('paidWO')==='1',paidH:v('paidH')==='1'});
+ for(const k of['P','HD','PL','UL','A']){const x=+v('r'+k);if(isNaN(x)||x<0||x>1)return alert('Wage days must be between 0 and 1.');db.settings.rules[k]=x}
+ audit('Settings changed','settings','');save();toast('Settings saved');renderNav();
+}
+
+/* =====================  BACKUP & RESTORE  ===================== */
+function pgBackup(){
+ const A=db.audit.slice(-40).reverse();
+ $('main').innerHTML=head('Backup & Restore','Protect your data. Download a backup regularly (for example every Saturday).')+
+ `<div class="warn"><b>Data is stored in this browser only. It is not automatically synchronized with other devices. Download regular backups.</b></div>
+ <h3>Backup</h3><button class="btn g" onclick="backupJSON()">⬇ Download Full Backup (JSON)</button>
+ <h3>Restore</h3><div class="bar"><input type="file" id="rfile" accept=".json,application/json"><button class="btn r" onclick="restoreJSON()">Restore from Backup</button></div><div class="sub">You will be asked to confirm. Restoring replaces all current data – download a backup first.</div>
+ <h3>CSV Export</h3>${['workers','sites','attendance','advances','deductions','payments','settlements'].map(k=>`<button class="btn o" onclick="exportCSV('${k}')">${k}</button>`).join(' ')}
+ <h3>Demo Data & Reset</h3><button class="btn r" onclick="removeDemo()">Remove Demo Data</button><button class="btn r" onclick="clearAll()">Clear ALL Data</button>
+ <h3>Audit Trail (last 40 changes)</h3>${tbl(['When','Action','Reference','Detail'],A.map(a=>`<tr><td>${esc(a.ts.slice(0,16).replace('T',' '))}</td><td>${esc(a.action)}</td><td>${esc(a.ref)}</td><td>${esc(String(a.detail).slice(0,160))}</td></tr>`).join(''))}`;
+}
+function backupJSON(){downloadFile('vijay_constructions_backup_'+today()+'.json',JSON.stringify(db,null,1),'application/json');toast('Backup downloaded')}
+function restoreJSON(){
+ const f=$('rfile').files[0];if(!f)return alert('Choose a backup (.json) file first.');
+ busy(true);const rd=new FileReader();rd.onerror=()=>{busy(false);alert('Could not read the file.')};rd.onload=()=>{busy(false);let o;try{o=JSON.parse(rd.result)}catch(e){return alert('This file is not a valid backup.')}
+  if(!o||!Array.isArray(o.workers)||!Array.isArray(o.sites)||!Array.isArray(o.attendance)||!Array.isArray(o.payments)||!o.settings)return alert('This file does not look like a Vijay Constructions backup.');
+  if(!confirm('Restore will REPLACE all current data with the backup ('+o.workers.length+' workers, '+o.attendance.length+' attendance records, '+o.payments.length+' payments). Continue?'))return;
+  db=Object.assign(defaultDB(),o);audit('Backup restored',f.name,'');save();load();toast('Backup restored');go('dashboard')};rd.readAsText(f);
+}
+function exportCSV(k){
+ let heads,rows;
+ if(k==='settlements'){heads=['Key','Approved','Approved On','Net','Gross'];rows=Object.keys(db.settlements).map(x=>{const s=db.settlements[x];return[x,s.approved,s.approvedOn,s.snap.net,s.snap.gross]})}
+ else{const L=db[k];heads=[...new Set(L.flatMap(o=>Object.keys(o)))].filter(h=>h!=='history');rows=L.map(o=>heads.map(h=>o[h]))}
+ downloadFile(k+'_'+today()+'.csv',toCSV(heads,rows),'text/csv');
+}
+function removeDemo(){
+ const dw=new Set(db.workers.filter(w=>w.demo).map(w=>w.id)),ds=new Set(db.sites.filter(s=>s.demo).map(s=>s.id));
+ if(!dw.size&&!ds.size&&!db.attendance.some(a=>a.demo))return alert('There is no demo data.');
+ if(!confirm('Remove all DEMO workers, sites, attendance, advances, deductions, payments and settlements? Your own data is not touched.'))return;
+ db.workers=db.workers.filter(w=>!w.demo);db.sites=db.sites.filter(s=>!s.demo);
+ const bad=o=>o.demo||dw.has(o.workerId)||ds.has(o.siteId&&0);
+ ['attendance','advances','deductions','payments'].forEach(k=>db[k]=db[k].filter(o=>!o.demo&&!dw.has(o.workerId)));
+ Object.keys(db.settlements).forEach(k=>{if(dw.has(k.split('|')[1]))delete db.settlements[k]});Object.keys(db.salaryInputs).forEach(k=>{if(dw.has(k.split('|')[1]))delete db.salaryInputs[k]});
+ db.workers.forEach(w=>{if(ds.has(w.siteId))w.siteId=''});
+ audit('Demo data removed','demo','');save();toast('Demo data removed');go('dashboard');
+}
+function clearAll(){
+ if(!confirm('This will permanently delete ALL data in this browser. Have you downloaded a backup?'))return;
+ if(prompt('Type DELETE to confirm clearing all data:')!=='DELETE')return;
+ const st=db.settings;db=defaultDB();db.settings=st;save();toast('All data cleared');go('dashboard');
+}
+
+/* =====================  DEMO DATA  ===================== */
+function loadDemo(){
+ const mkW=(name,cat,skill,wage,ot,mob,site)=>{const w={id:nextId('W','W-',4),name,mobile:mob,address:'DEMO address',cat,skill,wage:String(wage),otRate:String(ot),std:'',joined:addDays(today(),-90),siteId:site,pay:'Cash',ref:'',status:'Active',demo:true,created:nowTs()};db.workers.push(w);return w};
+ const s1={id:nextId('S','S-',3),name:'Sunrise Apartments – Block A',client:'ABC Developers (DEMO)',loc:'Pune',sup:'R. Kulkarni',start:addDays(today(),-120),exp:addDays(today(),200),end:'',status:'Active',demo:true};
+ const s2={id:nextId('S','S-',3),name:'Green Valley Villa',client:'Mr. Sharma (DEMO)',loc:'Nashik',sup:'S. Deshmukh',start:addDays(today(),-60),exp:addDays(today(),120),end:'',status:'Active',demo:true};
+ db.sites.push(s1,s2);
+ const w1=mkW('Ramesh Yadav','Mason','Skilled',900,100,'9800000001',s1.id),w2=mkW('Suresh Kumar','Helper','Unskilled',500,60,'9800000002',s1.id),w3=mkW('Mahesh Patil','Carpenter','Skilled',850,100,'9800000003',s1.id),w4=mkW('Anil Sharma','Painter','Semi-Skilled',700,80,'9800000004',s2.id),w5=mkW('Vikram Singh','Electrician','Skilled',1000,120,'9800000005',s2.id);
+ const pws=weekStartOf(addDays(today(),-7)),cws=weekStartOf(today());
+ const pat={[w1.id]:['P','P','P','P','P','P','WO'],[w2.id]:['P','P','HD','P','A','P','WO'],[w3.id]:['P','P','P','P','PL','P','WO'],[w4.id]:['P','P','P','UL','P','P','WO'],[w5.id]:['P','P','P','P','P','HD','WO']};
+ const otMap={[w1.id+'1']:2,[w3.id+'2']:1.5,[w5.id+'0']:2};
+ const add=(w,date,site,st,ot)=>{const hrs=st==='P'?8:st==='HD'?4:0;const a={id:nextId('ATT','ATT-',5),date,siteId:site,workerId:w.id,status:st,hours:hrs,ot:ot||0,remarks:'',rate:+w.wage,otRate:+w.otRate,history:[],demo:true,created:nowTs()};recompute(a);db.attendance.push(a)};
+ [w1,w2,w3,w4,w5].forEach(w=>{for(let i=0;i<7;i++){let site=w.siteId;if(w.id===w3.id&&(i===2||i===3))site=s2.id;add(w,addDays(pws,i),site,pat[w.id][i],otMap[w.id+i]||0)}});
+ for(let d=cws;d<=today();d=addDays(d,1)){if(d===addDays(pws,7)&&false)continue;[w1,w2,w3,w4,w5].forEach(w=>add(w,d,w.siteId,'P',0))}
+ const adv=(w,d,amt,mode,ref,pur)=>db.advances.push({id:nextId('ADV','ADV-',4),date:d,workerId:w.id,siteId:w.siteId,amount:amt,mode,ref,purpose:pur,remarks:'',history:[],demo:true});
+ adv(w2,addDays(pws,1),1000,'Cash','','Family need (DEMO)');adv(w5,addDays(pws,2),2000,'UPI','DEMO-UPI-1001','Advance (DEMO)');
+ const ded=(w,d,cat,amt,why,st)=>db.deductions.push({id:nextId('DED','DED-',4),date:d,workerId:w.id,siteId:w.siteId,category:cat,amount:amt,reason:why,status:st,remarks:'',history:[],demo:true});
+ ded(w2,addDays(pws,5),DEDCATS[0],500,'Advance recovery (DEMO)','Approved');ded(w4,addDays(pws,5),DEDCATS[2],150,'Tool damage (DEMO)','Approved');ded(w1,addDays(pws,5),DEDCATS[3],100,'Helmet replacement (DEMO) – pending approval','Pending');
+ const pay=(w,d,amt,mode,ref,rem)=>db.payments.push({id:nextId('PAY','PAY-',4),date:d,workerId:w.id,week:pws,siteId:w.siteId,amount:amt,mode,ref,remarks:rem,history:[],demo:true});
+ pay(w1,addDays(pws,6),3000,'Cash','','Partial payment (DEMO)');pay(w2,addDays(pws,6),1000,'UPI','DEMO-UPI-2001','Partial (DEMO)');pay(w2,addDays(pws,7),500,'Cash','','Second part payment (DEMO)');pay(w4,addDays(pws,6),3000,'Bank Transfer','DEMO-NEFT-3001','Partial (DEMO)');
+ audit('Demo data loaded','demo','');
+}
+
+/* =====================  MOBILE / PWA ADDITIONS  ===================== */
+function pgMore(){
+ $('main').innerHTML=head('More','All other sections')+`<div class="tiles">${[['sites','🏗️','Site Master'],['salary','🧾','Weekly Salary'],['advances','💵','Advances'],['deductions','➖','Deductions'],['reports','📊','Reports'],['settings','⚙️','Settings'],['backup','💾','Backup & Restore']].map(t=>`<button class="tile" onclick="go('${t[0]}')"><i>${t[1]}</i><span>${t[2]}</span></button>`).join('')}</div>
+ <div class="warn">⚠ Data is stored in this browser only. It is not automatically synchronized with other devices. Download regular backups.</div>`;
+}
+function payCards(){
+ const wk=weekStartOf(F.payWk||today()),rows=weekWorkers(wk);
+ return`<div class="bar"><label>Summary for week containing<input type="date" value="${F.payWk||today()}" onchange="F.payWk=this.value||today();pgPayments()"></label></div>
+ <div class="cards"><div class="card"><small>Total Salary Payable (incl. previous)</small><b>${money(sum(rows,'due'))}</b></div><div class="card g"><small>Total Paid</small><b>${money(sum(rows,'paid'))}</b></div><div class="card r"><small>Remaining Outstanding</small><b>${money(sum(rows,'closing'))}</b></div></div>`;
+}
+function downloadSlip(wid,ws){
+ const css='body{font-family:Arial,sans-serif;margin:16px;max-width:760px}.slip h1{margin:0;text-align:center;font-size:22px;color:#0b2e59}.slip h4{margin:2px 0 10px;text-align:center}table{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:13px}td,th{border:1px solid #444;padding:4px 7px;text-align:left}td.n,th.n{text-align:right}th{background:#e5ecf5}.sig{display:flex;justify-content:space-between;margin-top:50px}.sig div{border-top:1px solid #000;width:40%;text-align:center;padding-top:3px}@page{size:A4;margin:12mm}';
+ downloadFile('salary_slip_'+wid+'_'+ws+'.html','<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Salary Slip</title><style>'+css+'</style>'+slipHTML(wid,ws),'text/html');
+ toast('Slip downloaded – open it and use Print / Save as PDF');
+}
+function tidy(){
+ document.querySelectorAll('table.t:not(.keep)').forEach(t=>{
+  const hs=[...t.querySelectorAll('thead th')].map(x=>x.textContent.trim());
+  t.querySelectorAll('tbody tr').forEach(tr=>{let i=0;[...tr.children].forEach(td=>{const sp=td.colSpan||1;td.setAttribute('data-label',sp>1?'':(hs[i]||''));i+=sp})});
+ });
+ document.querySelectorAll('input[type=number]:not([inputmode])').forEach(x=>x.setAttribute('inputmode','decimal'));
+}
+let _tq=0;
+function watchDom(){new MutationObserver(()=>{if(_tq)return;_tq=requestAnimationFrame(()=>{_tq=0;tidy()})}).observe(document.body,{childList:true,subtree:true});tidy()}
+/* prevent accidental double submission of important buttons */
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button.btn');if(!b)return;const oc=b.getAttribute('onclick')||'';if(!/^(save|approve|restore)/.test(oc))return;const t=Date.now();if(b._t&&t-b._t<900){e.stopPropagation();e.preventDefault();return}b._t=t},true);
+/* Progressive Web App: icon + manifest are generated here; works as an installable app when hosted on HTTPS */
+function setupPWA(){try{if(/^https?:$/.test(location.protocol)&&'serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
+
+/* =====================  START  ===================== */
+function init(){load();renderNav();go('dashboard');watchDom();setupPWA()}
+if(typeof document!=='undefined'&&document.getElementById('main'))init();
+</script>
+</body>
+</html>
